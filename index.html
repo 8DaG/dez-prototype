@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Dež — prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky-top:#1b2a4a; --sky-bottom:#2e4370;
+    --cloud:#3a5182; --card:#22335c;
+    --ink:#f2f5ff; --ink-dim:#9fb0d8;
+    --sun:#ffcf5c; --sun-deep:#f5a623;
+    --burst:#7fd8ff; --wrong:#ff7b8a; --right:#7ce8a9;
+    --btn:#31477c; --btn-edge:#4a63a3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;overflow:hidden;}
+  body{
+    font-family:'Nunito',sans-serif;
+    background:linear-gradient(180deg,var(--sky-top) 0%,var(--sky-bottom) 100%);
+    color:var(--ink);
+    user-select:none;-webkit-user-select:none;
+    touch-action:manipulation;
+  }
+  #game{position:relative;width:100%;height:100%;max-width:480px;margin:0 auto;display:flex;flex-direction:column;}
+
+  /* ambient rain streaks */
+  .rain{position:absolute;top:-10%;width:1.5px;height:24px;background:linear-gradient(180deg,transparent,rgba(160,190,255,.25));border-radius:2px;animation:rainfall linear infinite;pointer-events:none;}
+  @keyframes rainfall{to{transform:translateY(115vh);}}
+
+  /* HUD */
+  #hud{display:flex;justify-content:space-between;align-items:center;padding:14px 18px 6px;z-index:5;}
+  #score{font-family:'Fredoka';font-size:30px;font-weight:600;letter-spacing:.5px;}
+  #combo{font-size:13px;font-weight:800;color:var(--sun);height:16px;opacity:0;transition:opacity .2s;}
+  #combo.show{opacity:1;}
+  #lives{display:flex;gap:6px;}
+  .drop{width:18px;height:22px;transition:opacity .3s, transform .3s;}
+  .drop.lost{opacity:.18;transform:scale(.8);}
+
+  /* play area */
+  #sky{position:relative;flex:1;overflow:hidden;}
+  .faller{position:absolute;width:88px;height:104px;display:flex;flex-direction:column;align-items:center;will-change:transform;}
+  .faller .icon-wrap{width:84px;height:84px;background:rgba(255,255,255,.07);border-radius:26px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.25);border:1.5px solid rgba(255,255,255,.12);}
+  .faller svg{width:64px;height:64px;}
+  .faller.golden .icon-wrap{background:rgba(255,207,92,.18);border-color:var(--sun);box-shadow:0 0 22px rgba(255,207,92,.55);}
+  .faller.golden::after{content:'×5';position:absolute;top:-8px;right:-4px;font-family:'Fredoka';font-weight:700;font-size:14px;color:var(--sun);}
+
+  /* burst droplets */
+  .droplet{position:absolute;width:10px;height:12px;pointer-events:none;animation:splash .55s ease-out forwards;}
+  @keyframes splash{
+    0%{opacity:1;transform:translate(0,0) scale(1);}
+    100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.4);}
+  }
+  .points-pop{position:absolute;font-family:'Fredoka';font-weight:700;font-size:22px;color:var(--right);pointer-events:none;animation:rise .7s ease-out forwards;text-shadow:0 2px 6px rgba(0,0,0,.4);}
+  @keyframes rise{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-46px);}}
+
+  /* learning flash */
+  #flash{position:absolute;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;background:rgba(20,30,58,.88);z-index:8;backdrop-filter:blur(3px);}
+  #flash.show{display:flex;}
+  #flash .icon-wrap{width:110px;height:110px;background:rgba(255,255,255,.08);border-radius:32px;display:flex;align-items:center;justify-content:center;}
+  #flash svg{width:84px;height:84px;}
+  #flash .word{font-family:'Fredoka';font-size:34px;font-weight:600;color:var(--sun);}
+  #flash .gloss{font-size:16px;color:var(--ink-dim);font-weight:700;}
+
+  /* toolbar */
+  #toolbar{display:flex;gap:10px;padding:12px 14px calc(18px + env(safe-area-inset-bottom));z-index:5;}
+  .word-btn{
+    flex:1;min-height:68px;border:none;border-radius:20px;
+    background:var(--btn);color:var(--ink);
+    font-family:'Fredoka';font-size:21px;font-weight:600;letter-spacing:.3px;
+    box-shadow:0 4px 0 var(--btn-edge) inset, 0 5px 14px rgba(0,0,0,.3);
+    cursor:pointer;transition:transform .08s;
+  }
+  .word-btn:active{transform:scale(.94);}
+  .word-btn.hit{background:var(--right);color:#0d2b1a;}
+  .word-btn.miss{background:var(--wrong);color:#3d0d15;animation:shake .3s;}
+  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+
+  /* screens */
+  .screen{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:linear-gradient(180deg,var(--sky-top),var(--sky-bottom));padding:30px;text-align:center;}
+  .screen h1{font-family:'Fredoka';font-size:64px;font-weight:700;letter-spacing:1px;}
+  .screen h1 .z{color:var(--sun);}
+  .screen .tag{color:var(--ink-dim);font-weight:700;font-size:16px;max-width:280px;line-height:1.5;}
+  .big-btn{
+    margin-top:14px;padding:18px 54px;border:none;border-radius:26px;
+    background:var(--sun);color:#3a2a00;
+    font-family:'Fredoka';font-size:24px;font-weight:700;
+    box-shadow:0 5px 0 var(--sun-deep), 0 8px 20px rgba(0,0,0,.35);
+    cursor:pointer;transition:transform .08s;
+  }
+  .big-btn:active{transform:translateY(3px);}
+  #over{display:none;}
+  #over h2{font-family:'Fredoka';font-size:40px;font-weight:600;}
+  #final-score{font-family:'Fredoka';font-size:74px;font-weight:700;color:var(--sun);line-height:1;}
+  #best{color:var(--ink-dim);font-weight:800;}
+  #missed{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;max-width:340px;margin-top:6px;}
+  #missed .m{display:flex;flex-direction:column;align-items:center;gap:2px;background:rgba(255,255,255,.07);border-radius:16px;padding:10px 12px;}
+  #missed .m svg{width:40px;height:40px;}
+  #missed .m span{font-family:'Fredoka';font-size:14px;font-weight:600;}
+  #missed .m small{font-size:11px;color:var(--ink-dim);font-weight:700;}
+  #missed-label{font-size:13px;color:var(--ink-dim);font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-top:8px;}
+
+  /* verb animations */
+  @keyframes runlegs{0%,100%{transform:rotate(24deg);}50%{transform:rotate(-24deg);}}
+  @keyframes runlegs2{0%,100%{transform:rotate(-24deg);}50%{transform:rotate(24deg);}}
+  @keyframes runarms{0%,100%{transform:rotate(-30deg);}50%{transform:rotate(30deg);}}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
+  @keyframes zz{0%{opacity:0;transform:translate(0,0) scale(.6);}30%{opacity:1;}100%{opacity:0;transform:translate(8px,-14px) scale(1.1);}}
+  @keyframes sip{0%,60%,100%{transform:rotate(0);}75%{transform:rotate(-18deg);}}
+  @keyframes chomp{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(3px) rotate(6deg);}}
+  .anim-run .leg1{animation:runlegs .35s linear infinite;transform-origin:32px 40px;}
+  .anim-run .leg2{animation:runlegs2 .35s linear infinite;transform-origin:32px 40px;}
+  .anim-run .arm1{animation:runarms .35s linear infinite;transform-origin:32px 26px;}
+  .anim-run .body{animation:bob .35s linear infinite;}
+  .anim-sleep .zz1{animation:zz 1.6s ease-out infinite;}
+  .anim-sleep .zz2{animation:zz 1.6s ease-out .5s infinite;}
+  .anim-sleep .zz3{animation:zz 1.6s ease-out 1s infinite;}
+  .anim-drink .cuparm{animation:sip 1.4s ease-in-out infinite;transform-origin:30px 30px;}
+  .anim-eat .fork{animation:chomp .7s ease-in-out infinite;transform-origin:40px 34px;}
+  @media (prefers-reduced-motion:reduce){
+    .anim-run *,.anim-sleep *,.anim-drink *,.anim-eat *{animation:none !important;}
+    .rain{display:none;}
+  }
+</style>
+</head>
+<body>
+<div id="game">
+  <div id="hud">
+    <div>
+      <div id="score">0</div>
+      <div id="combo"></div>
+    </div>
+    <div id="lives"></div>
+  </div>
+  <div id="sky"></div>
+  <div id="flash">
+    <div class="icon-wrap"></div>
+    <div class="word"></div>
+    <div class="gloss"></div>
+  </div>
+  <div id="toolbar"></div>
+
+  <div class="screen" id="start">
+    <h1>De<span class="z">ž</span></h1>
+    <div class="tag">Words are falling like rain. Tap the Slovene word that matches each icon before it lands.</div>
+    <button class="big-btn" id="play-btn">Igraj</button>
+  </div>
+
+  <div class="screen" id="over">
+    <h2>Konec igre</h2>
+    <div id="final-score">0</div>
+    <div id="best"></div>
+    <div id="missed-label" style="display:none">Worth another look</div>
+    <div id="missed"></div>
+    <button class="big-btn" id="again-btn">Še enkrat</button>
+  </div>
+</div>
+
+<script>
+// ---------- ICON LIBRARY (hand-drawn placeholder set) ----------
+// Consistent style: 64x64 viewBox, flat fills, 2.5 stroke, rounded.
+const S = 'xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none"';
+const ICONS = {
+  kruh: `<svg ${S}><ellipse cx="32" cy="38" rx="24" ry="15" fill="#b57e3c"/><ellipse cx="32" cy="36" rx="24" ry="15" fill="#d99a52"/><ellipse cx="32" cy="33" rx="24" ry="13" fill="#eab86e"/><path d="M16 30 q4 -5 8 0 M26 27 q4 -5 8 0 M36 30 q4 -5 8 0" stroke="#b57e3c" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+  mleko: `<svg ${S}><path d="M24 10 h16 v8 l5 10 v26 a3 3 0 0 1 -3 3 h-20 a3 3 0 0 1 -3 -3 v-26 l5 -10 z" fill="#f4f7ff" stroke="#c9d4ee" stroke-width="2.5"/><path d="M19 30 h26 v10 h-26 z" fill="#7fb2f0"/><circle cx="32" cy="35" r="3.4" fill="#f4f7ff"/><rect x="24" y="10" width="16" height="6" rx="2" fill="#7fb2f0"/></svg>`,
+  sir: `<svg ${S}><path d="M8 42 L32 20 L56 32 V46 a3 3 0 0 1 -3 3 H11 a3 3 0 0 1 -3 -3 z" fill="#ffd45e" stroke="#e0a92f" stroke-width="2.5"/><circle cx="24" cy="40" r="4" fill="#e8b93f"/><circle cx="40" cy="43" r="3" fill="#e8b93f"/><circle cx="35" cy="33" r="2.5" fill="#e8b93f"/></svg>`,
+  jabolko: `<svg ${S}><path d="M32 20 c-3 -8 8 -8 8 -8 s1 8 -8 8" fill="#7bc86a"/><path d="M32 22 c-10 -7 -22 1 -20 15 c1.6 11 9 17 14 16 c2.4 -.5 3.4 -1.6 6 -1.6 s3.6 1.1 6 1.6 c5 1 12.4 -5 14 -16 c2 -14 -10 -22 -20 -15 z" fill="#ef5f68" stroke="#c93c47" stroke-width="2.5"/><path d="M32 14 v8" stroke="#7a4a24" stroke-width="3" stroke-linecap="round"/></svg>`,
+  kava: `<svg ${S}><path d="M14 26 h30 v14 a12 12 0 0 1 -12 12 h-6 a12 12 0 0 1 -12 -12 z" fill="#fff" stroke="#c9d4ee" stroke-width="2.5"/><path d="M44 28 h4 a6 6 0 0 1 0 12 h-4" stroke="#c9d4ee" stroke-width="2.5"/><path d="M18 28 h22 v6 h-22z" fill="#8a5a34"/><path d="M24 12 q-3 4 0 8 M32 10 q-3 4 0 8" stroke="#9fb0d8" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+  voda: `<svg ${S}><path d="M32 8 C22 22 14 30 14 41 a18 18 0 0 0 36 0 C50 30 42 22 32 8 z" fill="#6fc3f7" stroke="#3f97d6" stroke-width="2.5"/><path d="M24 42 a8 8 0 0 0 7 8" stroke="#eaf7ff" stroke-width="3" stroke-linecap="round"/></svg>`,
+  pes: `<svg ${S}><path d="M14 20 l-4 12 6 2 z" fill="#b57e3c"/><path d="M50 20 l4 12 -6 2 z" fill="#b57e3c"/><circle cx="32" cy="34" r="18" fill="#d99a52" stroke="#b57e3c" stroke-width="2.5"/><ellipse cx="32" cy="42" rx="9" ry="7" fill="#f2e0c8"/><circle cx="25" cy="30" r="2.6" fill="#3a2a1a"/><circle cx="39" cy="30" r="2.6" fill="#3a2a1a"/><ellipse cx="32" cy="39" rx="3.4" ry="2.6" fill="#3a2a1a"/><path d="M32 41 v3 m0 0 q-3 3 -5 1 m5 -1 q3 3 5 1" stroke="#3a2a1a" stroke-width="2" stroke-linecap="round"/></svg>`,
+  macka: `<svg ${S}><path d="M18 20 l-2 -10 9 6 z" fill="#8f9bb8"/><path d="M46 20 l2 -10 -9 6 z" fill="#8f9bb8"/><circle cx="32" cy="34" r="17" fill="#aab6d4" stroke="#8f9bb8" stroke-width="2.5"/><circle cx="25" cy="31" r="2.4" fill="#2c3350"/><circle cx="39" cy="31" r="2.4" fill="#2c3350"/><path d="M29 38 q3 3 6 0" stroke="#2c3350" stroke-width="2" stroke-linecap="round"/><path d="M32 36 l0 0" stroke="#e88" stroke-width="3" stroke-linecap="round"/><path d="M14 34 h8 M14 39 h8 M42 34 h8 M42 39 h8" stroke="#8f9bb8" stroke-width="2" stroke-linecap="round"/></svg>`,
+  avto: `<svg ${S}><path d="M12 36 l4 -12 a4 4 0 0 1 4 -3 h24 a4 4 0 0 1 4 3 l4 12 z" fill="#ef8354" stroke="#c75f33" stroke-width="2.5"/><rect x="8" y="34" width="48" height="12" rx="5" fill="#f59e73" stroke="#c75f33" stroke-width="2.5"/><rect x="22" y="25" width="9" height="9" rx="2" fill="#cfe8ff"/><rect x="34" y="25" width="9" height="9" rx="2" fill="#cfe8ff"/><circle cx="20" cy="47" r="5.5" fill="#2c3350" stroke="#111726" stroke-width="2"/><circle cx="44" cy="47" r="5.5" fill="#2c3350" stroke="#111726" stroke-width="2"/></svg>`,
+  hisa: `<svg ${S}><path d="M10 30 L32 12 L54 30" stroke="#d0654f" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M15 29 h34 v22 a3 3 0 0 1 -3 3 h-28 a3 3 0 0 1 -3 -3 z" fill="#ffe9c9" stroke="#d8ad74" stroke-width="2.5"/><rect x="27" y="38" width="10" height="16" rx="2" fill="#a3653a"/><rect x="18" y="35" width="7" height="7" rx="1.5" fill="#7fb2f0"/><rect x="39" y="35" width="7" height="7" rx="1.5" fill="#7fb2f0"/></svg>`,
+  riba: `<svg ${S}><path d="M10 32 q14 -14 30 0 q-16 14 -30 0 z" fill="#6fc3f7" stroke="#3f97d6" stroke-width="2.5"/><path d="M40 32 l12 -8 v16 z" fill="#3f97d6"/><circle cx="20" cy="30" r="2.2" fill="#123"/><path d="M28 26 q3 6 0 12" stroke="#3f97d6" stroke-width="2" stroke-linecap="round"/></svg>`,
+  jajce: `<svg ${S}><path d="M32 10 C22 20 16 30 16 40 a16 16 0 0 0 32 0 C48 30 42 20 32 10 z" fill="#fff6e8" stroke="#e3cfa8" stroke-width="2.5"/><ellipse cx="26" cy="26" rx="4" ry="7" fill="#fff" opacity=".8" transform="rotate(-20 26 26)"/></svg>`,
+  // ----- verbs (animated) -----
+  spati: `<svg ${S} class="anim-sleep"><rect x="8" y="38" width="48" height="12" rx="5" fill="#7c6ff0"/><rect x="8" y="46" width="48" height="6" rx="3" fill="#5b4fd4"/><circle cx="20" cy="34" r="7" fill="#f2c9a0"/><rect x="24" y="32" width="26" height="8" rx="4" fill="#a8b8ea"/><rect x="10" y="28" width="12" height="7" rx="3.5" fill="#fff"/><text x="36" y="22" font-size="11" font-weight="bold" fill="#cfd9ff" class="zz1">z</text><text x="42" y="16" font-size="9" font-weight="bold" fill="#cfd9ff" class="zz2">z</text><text x="47" y="11" font-size="7" font-weight="bold" fill="#cfd9ff" class="zz3">z</text></svg>`,
+  teci: `<svg ${S} class="anim-run"><g class="body"><circle cx="34" cy="14" r="6" fill="#f2c9a0"/><path d="M32 20 L30 38" stroke="#4a90d9" stroke-width="7" stroke-linecap="round"/><path class="arm1" d="M32 25 L44 20" stroke="#f2c9a0" stroke-width="5" stroke-linecap="round"/><path d="M32 25 L21 30" stroke="#f2c9a0" stroke-width="5" stroke-linecap="round"/></g><path class="leg1" d="M31 38 L42 52" stroke="#2c3350" stroke-width="6" stroke-linecap="round"/><path class="leg2" d="M31 38 L22 52" stroke="#2c3350" stroke-width="6" stroke-linecap="round"/><path d="M8 50 h8 M6 44 h7 M10 56 h7" stroke="#9fb0d8" stroke-width="2.5" stroke-linecap="round" opacity=".7"/></svg>`,
+  jesti: `<svg ${S} class="anim-eat"><circle cx="24" cy="26" r="9" fill="#f2c9a0"/><path d="M20 27 a5 5 0 0 0 8 0" stroke="#8a4a2a" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="21" cy="23" r="1.6" fill="#333"/><circle cx="27" cy="23" r="1.6" fill="#333"/><g class="fork"><path d="M40 34 L48 22" stroke="#8f9bb8" stroke-width="3" stroke-linecap="round"/><path d="M46 24 l-2 -4 m4 6 l-1 -5 m3 7 l0 -5" stroke="#8f9bb8" stroke-width="2" stroke-linecap="round"/><circle cx="39" cy="35" r="4" fill="#ef5f68"/></g><ellipse cx="34" cy="50" rx="18" ry="5" fill="#fff" opacity=".85"/><ellipse cx="34" cy="48" rx="18" ry="5" fill="#e8ecf8"/></svg>`,
+  piti: `<svg ${S} class="anim-drink"><circle cx="26" cy="24" r="9" fill="#f2c9a0"/><circle cx="23" cy="21" r="1.6" fill="#333"/><circle cx="29" cy="21" r="1.6" fill="#333"/><ellipse cx="26" cy="28" rx="2.4" ry="1.8" fill="#8a4a2a"/><g class="cuparm"><path d="M36 42 h10 l-2 -14 h-6 z" fill="#6fc3f7" stroke="#3f97d6" stroke-width="2"/><path d="M43 28 L46 16" stroke="#e88" stroke-width="2.5" stroke-linecap="round"/></g><path d="M20 34 L36 40" stroke="#f2c9a0" stroke-width="5" stroke-linecap="round"/></svg>`
+};
+
+// ---------- NUMBER FORMS (BEST-EFFORT — UNVERIFIED, pending native review) ----------
+// forms[1]=singular, forms[2]=dual, forms[3]=plural, numeral included.
+const NUMBER_FORMS = {
+  jabolko:{1:'eno jabolko',2:'dve jabolki',3:'tri jabolka'},
+  pes:    {1:'en pes',     2:'dva psa',    3:'trije psi'},
+  macka:  {1:'ena mačka',  2:'dve mački',  3:'tri mačke'},
+  jajce:  {1:'eno jajce',  2:'dve jajci',  3:'tri jajca'},
+  riba:   {1:'ena riba',   2:'dve ribi',   3:'tri ribe'},
+  avto:   {1:'en avto',    2:'dva avta',   3:'trije avti'},
+  hisa:   {1:'ena hiša',   2:'dve hiši',   3:'tri hiše'}
+};
+
+// ---------- WORD POOL (prototype ledger: taught-pool stand-in) ----------
+const POOL = [
+  {key:'kruh',    sl:'kruh',    en:'bread',  cls:'noun'},
+  {key:'mleko',   sl:'mleko',   en:'milk',   cls:'noun'},
+  {key:'sir',     sl:'sir',     en:'cheese', cls:'noun'},
+  {key:'jabolko', sl:'jabolko', en:'apple',  cls:'noun'},
+  {key:'kava',    sl:'kava',    en:'coffee', cls:'noun'},
+  {key:'voda',    sl:'voda',    en:'water',  cls:'noun'},
+  {key:'pes',     sl:'pes',     en:'dog',    cls:'noun'},
+  {key:'macka',   sl:'mačka',   en:'cat',    cls:'noun'},
+  {key:'avto',    sl:'avto',    en:'car',    cls:'noun'},
+  {key:'hisa',    sl:'hiša',    en:'house',  cls:'noun'},
+  {key:'riba',    sl:'riba',    en:'fish',   cls:'noun'},
+  {key:'jajce',   sl:'jajce',   en:'egg',    cls:'noun'},
+  {key:'spati',   sl:'spati',   en:'to sleep', cls:'verb'},
+  {key:'teci',    sl:'teči',    en:'to run',   cls:'verb'},
+  {key:'jesti',   sl:'jesti',   en:'to eat',   cls:'verb'},
+  {key:'piti',    sl:'piti',    en:'to drink', cls:'verb'}
+];
+
+// ---------- STATE ----------
+const sky = document.getElementById('sky');
+const toolbar = document.getElementById('toolbar');
+const scoreEl = document.getElementById('score');
+const comboEl = document.getElementById('combo');
+const livesEl = document.getElementById('lives');
+const flash = document.getElementById('flash');
+
+let score=0, best=0, lives=3, combo=0, running=false, paused=false;
+let fallSpeed=55;           // px per second, ramps up
+let spawnGap=2600;          // ms between spawns, ramps down
+let active=[];              // falling items
+let rafId=null, lastTs=0, spawnTimer=0;
+let buttonCount=3;
+let sinceCorrect=0;
+let missedSet=new Map();
+
+// ambient rain
+for(let i=0;i<26;i++){
+  const r=document.createElement('div');
+  r.className='rain';
+  r.style.left=Math.random()*100+'%';
+  r.style.animationDuration=(1.4+Math.random()*1.6)+'s';
+  r.style.animationDelay=(-Math.random()*3)+'s';
+  document.getElementById('game').appendChild(r);
+}
+
+function renderLives(){
+  livesEl.innerHTML='';
+  for(let i=0;i<3;i++){
+    const d=document.createElement('div');
+    d.className='drop'+(i>=lives?' lost':'');
+    d.innerHTML=`<svg viewBox="0 0 18 22" fill="none"><path d="M9 1 C5 8 1 12 1 15.5 a8 8 0 0 0 16 0 C17 12 13 8 9 1z" fill="#6fc3f7" stroke="#3f97d6" stroke-width="1.5"/></svg>`;
+    livesEl.appendChild(d);
+  }
+}
+
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+// ---------- SPAWN ----------
+function spawn(){
+  // plurality mode: unlocked from 150 pts, ~40% of eligible spawns
+  let item, count=1, plural=false;
+  const pluralUnlocked = score>=150;
+  if(pluralUnlocked && Math.random()<0.4){
+    const countables = POOL.filter(p=>NUMBER_FORMS[p.key]);
+    item = pick(countables);
+    count = 1+Math.floor(Math.random()*3); // 1, 2 or 3
+    plural = true;
+  } else {
+    item = pick(POOL);
+  }
+  const golden = Math.random()<0.07;
+  const el=document.createElement('div');
+  el.className='faller'+(golden?' golden':'');
+  el.innerHTML=`<div class="icon-wrap">${renderCount(item.key,count)}</div>`;
+  const w = sky.clientWidth;
+  const x = 12 + Math.random()*(w-112);
+  el.style.left=x+'px';
+  el.style.transform='translateY(-110px)';
+  sky.appendChild(el);
+  const f={item, el, y:-110, golden, resolved:false, count, plural};
+  active.push(f);
+  buildToolbarFor(f);
+}
+
+// Compose 1, 2 or 3 copies of an icon inside one tile (plurality = composition, not new assets)
+function renderCount(key, count){
+  const raw = ICONS[key];
+  if(count===1) return raw;
+  const inner = raw.replace(/^<svg[^>]*>/,'').replace(/<\/svg>$/,'');
+  if(count===2){
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+      <g transform="translate(-4,8) scale(0.62)">${inner}</g>
+      <g transform="translate(24,2) scale(0.68)">${inner}</g>
+    </svg>`;
+  }
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+    <g transform="translate(-2,-2) scale(0.52)">${inner}</g>
+    <g transform="translate(30,0) scale(0.5)">${inner}</g>
+    <g transform="translate(13,26) scale(0.56)">${inner}</g>
+  </svg>`;
+}
+
+function labelFor(f){
+  return f.plural ? NUMBER_FORMS[f.item.key][f.count] : f.item.sl;
+}
+
+function buildToolbarFor(f){
+  // toolbar always reflects the LOWEST unresolved faller (the urgent one)
+  const target = lowestFaller();
+  if(!target) return;
+  toolbar.innerHTML='';
+  let opts;
+  if(target.plural){
+    // number drill: SAME word, three number forms — the dual contrast is the exercise
+    const forms = NUMBER_FORMS[target.item.key];
+    opts = shuffle([1,2,3]).map(n=>({label:forms[n], correct:n===target.count}));
+  } else {
+    const distractPool = POOL.filter(p=>p.key!==target.item.key && (score<400 || p.cls===target.item.cls));
+    const chosen = shuffle([target.item, ...shuffle([...distractPool]).slice(0, buttonCount-1)]);
+    opts = chosen.map(o=>({label:o.sl, correct:o.key===target.item.key}));
+  }
+  opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='word-btn';
+    if(target.plural) b.style.fontSize='17px';
+    b.textContent=o.label;
+    b.addEventListener('pointerdown', ()=>answer(o, b), {passive:true});
+    toolbar.appendChild(b);
+  });
+}
+
+function lowestFaller(){
+  let low=null;
+  for(const f of active){ if(!f.resolved && (!low || f.y>low.y)) low=f; }
+  return low;
+}
+
+// ---------- ANSWER ----------
+function answer(chosen, btn){
+  if(!running||paused) return;
+  const target=lowestFaller();
+  if(!target) return;
+  if(chosen.correct){
+    btn.classList.add('hit');
+    resolve(target,true);
+  } else {
+    btn.classList.add('miss');
+    loseLife(target);
+  }
+}
+
+function resolve(f, correct){
+  f.resolved=true;
+  active=active.filter(a=>a!==f);
+  if(correct){
+    combo++;
+    sinceCorrect=0;
+    const mult=Math.min(5, 1+Math.floor(combo/4));
+    const pts=(f.golden?50:10)*mult;
+    score+=pts;
+    scoreEl.textContent=score;
+    if(mult>1){comboEl.textContent='×'+mult+' combo';comboEl.classList.add('show');}
+    burst(f, pts);
+    // ramp
+    fallSpeed=Math.min(190, fallSpeed+2.2);
+    spawnGap=Math.max(1250, spawnGap-28);
+    if(score>=200) buttonCount=4;
+    f.el.remove();
+    buildToolbarFor(null);
+  }
+}
+
+function burst(f, pts){
+  const rect=f.el.getBoundingClientRect();
+  const skyRect=sky.getBoundingClientRect();
+  const cx=rect.left-skyRect.left+44, cy=rect.top-skyRect.top+42;
+  for(let i=0;i<8;i++){
+    const d=document.createElement('div');
+    d.className='droplet';
+    const ang=(i/8)*Math.PI*2;
+    d.style.setProperty('--dx',Math.cos(ang)*46+'px');
+    d.style.setProperty('--dy',Math.sin(ang)*46-14+'px');
+    d.style.left=cx+'px';d.style.top=cy+'px';
+    d.innerHTML=`<svg viewBox="0 0 10 12"><path d="M5 0 C3 4 1 6 1 8 a4 4 0 0 0 8 0 C9 6 7 4 5 0z" fill="#7fd8ff"/></svg>`;
+    sky.appendChild(d);
+    setTimeout(()=>d.remove(),600);
+  }
+  const p=document.createElement('div');
+  p.className='points-pop';
+  p.textContent='+'+pts;
+  p.style.left=(cx-10)+'px';p.style.top=(cy-20)+'px';
+  sky.appendChild(p);
+  setTimeout(()=>p.remove(),750);
+}
+
+// ---------- LIFE LOSS / LEARNING FLASH ----------
+function loseLife(f){
+  combo=0;comboEl.classList.remove('show');
+  lives--; renderLives();
+  const missKey = f.plural ? f.item.key+'-'+f.count : f.item.key;
+  missedSet.set(missKey,{key:f.item.key,count:f.count||1,sl:labelFor(f),en:f.plural?(f.count+' × '+f.item.en.replace('to ','')):f.item.en});
+  f.resolved=true;
+  active=active.filter(a=>a!==f);
+  f.el.remove();
+  // learning moment
+  paused=true;
+  flash.querySelector('.icon-wrap').innerHTML=renderCount(f.item.key, f.count||1);
+  flash.querySelector('.word').textContent=labelFor(f);
+  flash.querySelector('.gloss').textContent=f.item.en;
+  flash.classList.add('show');
+  setTimeout(()=>{
+    flash.classList.remove('show');
+    paused=false;
+    if(lives<=0){gameOver();}
+    else buildToolbarFor(null);
+  },1300);
+}
+
+// ---------- LOOP ----------
+function loop(ts){
+  if(!running){return;}
+  if(!lastTs) lastTs=ts;
+  const dt=(ts-lastTs)/1000;
+  lastTs=ts;
+  if(!paused){
+    spawnTimer+=dt*1000;
+    const maxOnScreen = score>=350 ? 2 : 1;
+    if(spawnTimer>=spawnGap && active.length<maxOnScreen){
+      spawnTimer=0;spawn();
+    }
+    const floor=sky.clientHeight-90;
+    for(const f of [...active]){
+      f.y+=fallSpeed*dt;
+      f.el.style.transform=`translateY(${f.y}px)`;
+      if(f.y>=floor){loseLife(f);}
+    }
+  }
+  rafId=requestAnimationFrame(loop);
+}
+
+// ---------- GAME FLOW ----------
+function startGame(){
+  score=0;lives=3;combo=0;fallSpeed=55;spawnGap=2600;buttonCount=3;
+  active.forEach(f=>f.el.remove());active=[];missedSet=new Map();
+  scoreEl.textContent='0';comboEl.classList.remove('show');
+  renderLives();
+  document.getElementById('start').style.display='none';
+  document.getElementById('over').style.display='none';
+  running=true;paused=false;lastTs=0;spawnTimer=2000;
+  toolbar.innerHTML='';
+  rafId=requestAnimationFrame(loop);
+}
+
+function gameOver(){
+  running=false;cancelAnimationFrame(rafId);
+  best=Math.max(best,score);
+  document.getElementById('final-score').textContent=score;
+  document.getElementById('best').textContent='Najboljši rezultat: '+best;
+  const m=document.getElementById('missed');
+  m.innerHTML='';
+  document.getElementById('missed-label').style.display = missedSet.size?'block':'none';
+  missedSet.forEach(it=>{
+    const d=document.createElement('div');
+    d.className='m';
+    d.innerHTML=renderCount(it.key,it.count)+`<span>${it.sl}</span><small>${it.en}</small>`;
+    m.appendChild(d);
+  });
+  document.getElementById('over').style.display='flex';
+}
+
+document.getElementById('play-btn').addEventListener('click',startGame);
+document.getElementById('again-btn').addEventListener('click',startGame);
+renderLives();
+</script>
+</body>
+</html>
