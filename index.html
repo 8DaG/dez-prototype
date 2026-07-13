@@ -91,6 +91,53 @@
   }
   .big-btn:active{transform:translateY(3px);}
   #over{display:none;}
+  /* study cards */
+  #study{display:none;z-index:12;}
+  #study.show{display:flex;}
+  #study .batch-label{font-size:13px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-dim);}
+  #study-card{width:230px;min-height:300px;background:var(--card);border-radius:28px;border:1.5px solid rgba(255,255,255,.14);box-shadow:0 10px 30px rgba(0,0,0,.35);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:26px;cursor:pointer;transition:transform .1s;}
+  #study-card:active{transform:scale(.97);}
+  #study-card .icon-wrap{width:120px;height:120px;background:rgba(255,255,255,.07);border-radius:30px;display:flex;align-items:center;justify-content:center;}
+  #study-card svg{width:92px;height:92px;}
+  #study-card .sl{font-family:'Fredoka';font-size:32px;font-weight:600;color:var(--sun);}
+  #study-card .en{font-size:17px;font-weight:800;color:var(--ink-dim);min-height:22px;}
+  #study-card .hint{font-size:12px;font-weight:700;color:var(--ink-dim);opacity:.7;}
+  #study-dots{display:flex;gap:7px;}
+  #study-dots i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.2);}
+  #study-dots i.on{background:var(--sun);}
+  /* sticker book */
+  #book{display:none;z-index:12;overflow-y:auto;justify-content:flex-start;padding-top:56px;}
+  #book.show{display:flex;}
+  #book h2{font-family:'Fredoka';font-size:32px;font-weight:600;}
+  #book .grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:360px;}
+  #book .sticker{width:104px;background:rgba(255,255,255,.06);border-radius:18px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;}
+  #book .sticker svg{width:52px;height:52px;}
+  #book .sticker span{font-family:'Fredoka';font-size:15px;font-weight:600;}
+  #book .sticker small{font-size:11px;color:var(--ink-dim);font-weight:700;}
+  #book .sticker.mastered{border:1.5px solid var(--sun);}
+  #book .sticker.mastered::after{content:'★';position:absolute;top:4px;right:8px;color:var(--sun);font-size:14px;}
+  #book .sticker:not(.mastered){opacity:.75;}
+  .ghost-btn{background:transparent;border:2px solid rgba(255,255,255,.25);color:var(--ink);border-radius:20px;padding:12px 30px;font-family:'Fredoka';font-size:18px;font-weight:600;cursor:pointer;}
+  /* spomin (pairs) */
+  #spomin{display:none;z-index:12;justify-content:flex-start;padding-top:48px;gap:10px;}
+  #spomin.show{display:flex;}
+  #spomin h2{font-family:'Fredoka';font-size:32px;font-weight:600;}
+  #spomin .stats{font-size:14px;font-weight:800;color:var(--ink-dim);}
+  #sp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:min(92vw,360px);}
+  .sp-card{aspect-ratio:3/4;border-radius:14px;background:var(--btn);border:1.5px solid var(--btn-edge);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:transform .12s;padding:4px;}
+  .sp-card:active{transform:scale(.95);}
+  .sp-card .back{font-family:'Fredoka';font-size:24px;color:rgba(255,255,255,.28);font-weight:700;}
+  .sp-card .face{display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;width:100%;}
+  .sp-card.flipped{background:var(--card);border-color:rgba(255,255,255,.3);}
+  .sp-card.flipped .back{display:none;}
+  .sp-card.flipped .face{display:flex;}
+  .sp-card .face svg{width:44px;height:44px;}
+  .sp-card .face .w{font-family:'Fredoka';font-size:14px;font-weight:600;line-height:1.1;word-break:break-word;}
+  .sp-card.matched{background:rgba(124,232,169,.16);border-color:var(--right);pointer-events:none;}
+  .sp-card.wrongpair{animation:shake .3s;border-color:var(--wrong);}
+  #sp-done{display:none;flex-direction:column;align-items:center;gap:8px;}
+  #sp-done.show{display:flex;}
+  #sp-done .fin{font-family:'Fredoka';font-size:24px;font-weight:600;color:var(--sun);}
   #over h2{font-family:'Fredoka';font-size:40px;font-weight:600;}
   #final-score{font-family:'Fredoka';font-size:74px;font-weight:700;color:var(--sun);line-height:1;}
   #best{color:var(--ink-dim);font-weight:800;}
@@ -143,8 +190,40 @@
 
   <div class="screen" id="start">
     <h1>De<span class="z">ž</span></h1>
-    <div class="tag">Words are falling like rain. Tap the Slovene word that matches each icon before it lands.</div>
+    <div class="tag">Words are falling like rain. Tap the Slovene word that matches each icon before it lands. Peek at the Slovarček any time.</div>
     <button class="big-btn" id="play-btn">Igraj</button>
+    <div style="display:flex;gap:10px;">
+      <button class="ghost-btn" id="book-btn">Slovarček</button>
+      <button class="ghost-btn" id="spomin-btn">Spomin</button>
+    </div>
+  </div>
+
+  <div class="screen" id="spomin">
+    <h2>Spomin</h2>
+    <div class="stats" id="sp-stats">Poteze: 0</div>
+    <div id="sp-grid"></div>
+    <div id="sp-done">
+      <div class="fin">Bravo!</div>
+      <button class="big-btn" id="sp-again">Še enkrat</button>
+    </div>
+    <button class="ghost-btn" id="sp-close" style="margin-top:6px;">Nazaj</button>
+  </div>
+
+  <div class="screen" id="study">
+    <div class="batch-label">Nove besede</div>
+    <div id="study-card">
+      <div class="icon-wrap"></div>
+      <div class="sl"></div>
+      <div class="en"></div>
+      <div class="hint">tap</div>
+    </div>
+    <div id="study-dots"></div>
+  </div>
+
+  <div class="screen" id="book">
+    <h2>Slovarček</h2>
+    <div class="grid" id="book-grid"></div>
+    <button class="ghost-btn" id="book-close" style="margin:20px 0 40px;">Nazaj</button>
   </div>
 
   <div class="screen" id="over">
@@ -213,6 +292,34 @@ const POOL = [
   {key:'piti',    sl:'piti',    en:'to drink', cls:'verb'}
 ];
 
+// ---------- LEARNING STATE (seen-pool rule: only studied words may fall) ----------
+const BATCH_SIZE = 4;
+const MASTERY_RUNS = 3;
+// progress: {seen:[keys...], mastery:{key:{runsCorrect:n, correctThisRun:bool}}}
+let progress = loadProgress();
+let lastBatch = [];   // keys studied immediately before current run
+
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem('dez-progress');
+    if(raw) return JSON.parse(raw);
+  }catch(e){/* storage unavailable (e.g. sandboxed preview) — session-only */}
+  return {seen:[], mastery:{}};
+}
+function saveProgress(){
+  try{ localStorage.setItem('dez-progress', JSON.stringify(progress)); }catch(e){}
+}
+function seenItems(){ return POOL.filter(p=>progress.seen.includes(p.key)); }
+function unseenItems(){ return POOL.filter(p=>!progress.seen.includes(p.key)); }
+function masteredCount(){ return progress.seen.filter(k=>(progress.mastery[k]?.runsCorrect||0)>=MASTERY_RUNS).length; }
+function metCount(){ return progress.seen.filter(k=>(progress.mastery[k]?.runsCorrect||0)>=1 || progress.mastery[k]?.met).length; }
+// new batch unlocks when most current words have at least been met in play
+function batchDue(){
+  if(progress.seen.length===0) return true;
+  if(unseenItems().length===0) return false;
+  return metCount() >= progress.seen.length - 1;
+}
+
 // ---------- STATE ----------
 const sky = document.getElementById('sky');
 const toolbar = document.getElementById('toolbar');
@@ -255,14 +362,17 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 
 // ---------- SPAWN ----------
 function spawn(){
-  // plurality mode: unlocked from 150 pts, ~40% of eligible spawns
+  // full-pool arcade (v2 feel); plurality from 150 pts on countable nouns
   let item, count=1, plural=false;
-  const pluralUnlocked = score>=150;
-  if(pluralUnlocked && Math.random()<0.4){
+  if(score>=150 && Math.random()<0.4){
     const countables = POOL.filter(p=>NUMBER_FORMS[p.key]);
     item = pick(countables);
     count = 1+Math.floor(Math.random()*3); // 1, 2 or 3
     plural = true;
+  } else if(Math.random()<0.5){
+    // gentle bias toward least-mastered words (invisible spaced repetition)
+    const sorted=[...POOL].sort((a,b)=>(progress.mastery[a.key]?.runsCorrect||0)-(progress.mastery[b.key]?.runsCorrect||0));
+    item = pick(sorted.slice(0, 8));
   } else {
     item = pick(POOL);
   }
@@ -351,6 +461,14 @@ function resolve(f, correct){
   f.resolved=true;
   active=active.filter(a=>a!==f);
   if(correct){
+    // mastery tracking: one credit per word per run
+    const k=f.item.key;
+    progress.mastery[k]=progress.mastery[k]||{runsCorrect:0};
+    progress.mastery[k].met=true;
+    if(!progress.mastery[k].correctThisRun){
+      progress.mastery[k].correctThisRun=true;
+      progress.mastery[k].runsCorrect=(progress.mastery[k].runsCorrect||0)+1;
+    }
     combo++;
     sinceCorrect=0;
     const mult=Math.min(5, 1+Math.floor(combo/4));
@@ -436,10 +554,133 @@ function loop(ts){
   rafId=requestAnimationFrame(loop);
 }
 
+// ---------- STUDY FLOW ----------
+const studyScreen=document.getElementById('study');
+const studyCard=document.getElementById('study-card');
+const studyDots=document.getElementById('study-dots');
+let studyQueue=[], studyIdx=0, studyFlipped=false;
+
+function beginSession(){
+  document.getElementById('start').style.display='none';
+  document.getElementById('over').style.display='none';
+  lastBatch=[];
+  startGame();
+}
+
+function startStudy(){
+  studyIdx=0; studyFlipped=false;
+  studyDots.innerHTML=studyQueue.map((_,i)=>`<i class="${i===0?'on':''}"></i>`).join('');
+  showStudyCard();
+  studyScreen.classList.add('show');
+  studyScreen.style.display='flex';
+}
+function showStudyCard(){
+  const it=POOL.find(p=>p.key===studyQueue[studyIdx]);
+  studyCard.querySelector('.icon-wrap').innerHTML=ICONS[it.key];
+  studyCard.querySelector('.sl').textContent=it.sl;
+  studyCard.querySelector('.en').textContent='';
+  studyCard.querySelector('.hint').textContent='tap';
+  studyFlipped=false;
+  [...studyDots.children].forEach((d,i)=>d.className=i===studyIdx?'on':'');
+}
+studyCard.addEventListener('pointerdown',()=>{
+  const it=POOL.find(p=>p.key===studyQueue[studyIdx]);
+  if(!studyFlipped){
+    studyCard.querySelector('.en').textContent=it.en;
+    studyCard.querySelector('.hint').textContent='tap for next';
+    studyFlipped=true;
+  } else {
+    if(!progress.seen.includes(it.key)) progress.seen.push(it.key);
+    studyIdx++;
+    if(studyIdx<studyQueue.length){ showStudyCard(); }
+    else{
+      lastBatch=[...studyQueue];
+      saveProgress();
+      studyScreen.classList.remove('show');
+      studyScreen.style.display='none';
+      startGame();
+    }
+  }
+},{passive:true});
+
+// ---------- STICKER BOOK / DICTIONARY ----------
+const book=document.getElementById('book');
+function openBook(){
+  const g=document.getElementById('book-grid');
+  g.innerHTML='';
+  POOL.forEach(it=>{
+    const mastered=(progress.mastery[it.key]?.runsCorrect||0)>=MASTERY_RUNS;
+    const d=document.createElement('div');
+    d.className='sticker'+(mastered?' mastered':'');
+    d.innerHTML=ICONS[it.key]+`<span>${it.sl}</span><small>${it.en}</small>`;
+    g.appendChild(d);
+  });
+  book.classList.add('show');book.style.display='flex';
+}
+document.getElementById('book-btn').addEventListener('click',openBook);
+document.getElementById('book-close').addEventListener('click',()=>{book.classList.remove('show');book.style.display='none';});
+
+// ---------- SPOMIN (pairs: icon <-> Slovene word) ----------
+const spScreen=document.getElementById('spomin');
+const spGrid=document.getElementById('sp-grid');
+const spStats=document.getElementById('sp-stats');
+let spFirst=null, spLock=false, spMoves=0, spMatched=0;
+
+function startSpomin(){
+  spGrid.innerHTML='';spFirst=null;spLock=false;spMoves=0;spMatched=0;
+  spStats.textContent='Poteze: 0';
+  document.getElementById('sp-done').classList.remove('show');
+  const words=shuffle([...POOL]).slice(0,8);
+  const cards=shuffle(words.flatMap(w=>[
+    {key:w.key,kind:'icon'},
+    {key:w.key,kind:'word',sl:w.sl}
+  ]));
+  cards.forEach(c=>{
+    const d=document.createElement('div');
+    d.className='sp-card';
+    d.innerHTML=`<div class="back">?</div><div class="face">${c.kind==='icon'?ICONS[c.key]:`<div class="w">${c.sl}</div>`}</div>`;
+    d.addEventListener('pointerdown',()=>spFlip(d,c),{passive:true});
+    spGrid.appendChild(d);
+  });
+  spScreen.classList.add('show');spScreen.style.display='flex';
+}
+
+function spFlip(el,c){
+  if(spLock||el.classList.contains('flipped')||el.classList.contains('matched'))return;
+  el.classList.add('flipped');
+  if(!spFirst){spFirst={el,c};return;}
+  spMoves++;spStats.textContent='Poteze: '+spMoves;
+  const a=spFirst;spFirst=null;
+  if(a.c.key===c.key && a.c.kind!==c.kind){
+    a.el.classList.add('matched');el.classList.add('matched');
+    spMatched++;
+    // matches feed mastery lightly: counts once per Spomin game as a "met"
+    progress.mastery[c.key]=progress.mastery[c.key]||{runsCorrect:0};
+    progress.mastery[c.key].met=true;
+    if(spMatched===8){
+      saveProgress();
+      document.getElementById('sp-done').classList.add('show');
+    }
+  } else {
+    spLock=true;
+    a.el.classList.add('wrongpair');el.classList.add('wrongpair');
+    setTimeout(()=>{
+      a.el.classList.remove('flipped','wrongpair');
+      el.classList.remove('flipped','wrongpair');
+      spLock=false;
+    },900);
+  }
+}
+
+document.getElementById('spomin-btn').addEventListener('click',startSpomin);
+document.getElementById('sp-again').addEventListener('click',startSpomin);
+document.getElementById('sp-close').addEventListener('click',()=>{spScreen.classList.remove('show');spScreen.style.display='none';});
+
 // ---------- GAME FLOW ----------
 function startGame(){
   score=0;lives=3;combo=0;fallSpeed=55;spawnGap=2600;buttonCount=3;
   active.forEach(f=>f.el.remove());active=[];missedSet=new Map();
+  Object.values(progress.mastery).forEach(m=>m.correctThisRun=false);
   scoreEl.textContent='0';comboEl.classList.remove('show');
   renderLives();
   document.getElementById('start').style.display='none';
@@ -451,6 +692,7 @@ function startGame(){
 
 function gameOver(){
   running=false;cancelAnimationFrame(rafId);
+  saveProgress();
   best=Math.max(best,score);
   document.getElementById('final-score').textContent=score;
   document.getElementById('best').textContent='Najboljši rezultat: '+best;
@@ -466,8 +708,8 @@ function gameOver(){
   document.getElementById('over').style.display='flex';
 }
 
-document.getElementById('play-btn').addEventListener('click',startGame);
-document.getElementById('again-btn').addEventListener('click',startGame);
+document.getElementById('play-btn').addEventListener('click',beginSession);
+document.getElementById('again-btn').addEventListener('click',beginSession);
 renderLives();
 </script>
 </body>
