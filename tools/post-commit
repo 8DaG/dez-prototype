@@ -1,0 +1,4 @@
+#!/bin/sh
+# One-way mirror to OneDrive after every commit. .git excluded: OneDrive sync corrupts git internals.
+robocopy "C:/Dev/superintelligence/games/dez" "C:/Users/Christian/OneDrive/Backups/dez" /MIR /XD .git node_modules /NFL /NDL /NJH /NJS >NUL 2>&1
+exit 0
