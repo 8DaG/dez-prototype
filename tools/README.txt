@@ -6,3 +6,4 @@ copy post-commit into .git/hooks/ and make it executable:
 
 This hook one-way mirrors the working tree (excluding .git) to
 %OneDrive%/Backups/dez after every commit. OneDrive is never the working copy.
+# trivial touch for hook test
