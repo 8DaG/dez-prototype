@@ -1,0 +1,209 @@
+DEŽ CLASSROOM PLATFORM — SPECIFICATION v1
+Design document for Cowork; MUST pass superintelligence-guardian
+review before any implementation brief is written.
+Convention: British English. Status: DRAFT — awaiting Christian's
+numbered corrections.
+
+========================================================
+SECTION 1 — PURPOSE & PHILOSOPHY
+========================================================
+A minimal classroom layer over the Dež game. One permanent QR
+sticker per class connects students to their teacher's current
+weekly tasks. Design principles, in priority order:
+P1  Near-zero teacher burden. The intended success case is a
+    teacher who sets up once and never opens the dashboard again.
+P2  Uncongested student surface. A scan lands on at most three
+    big buttons. No accounts, no passwords, no feeds, no emails.
+P3  Data minimalism. Collect nothing that is not displayed to
+    the teacher for a pedagogical purpose.
+P4  NO TEACHER MONITORING (hard rule). The system stores and
+    displays nothing about teacher behaviour: no last-login,
+    no activity timestamps, no completion indicators, no
+    analytics about staff, to anyone, including administrators.
+    This is a permanent product commitment, not a default.
+
+========================================================
+SECTION 2 — ENTITIES (Phase A)
+========================================================
+Teacher      — account (see O1: reuse Superintelligence auth).
+Class        — name, random unguessable slug (the QR target),
+               owning teacher, mode (programme | manual),
+               programme ref + start date + paused flag,
+               week pointer.
+Assignment   — one week's unit: title, up to three task slots
+               (label + URL each); slot 1 conventionally the
+               Dež game URL (share code + level baked in).
+Programme    — ordered list of prebuilt weekly assignments
+               (title, word set ≤20, level, optional lesson
+               link), authored in the content pipeline, stored
+               as data.
+(Phase B adds: StudentName, ScoreEvent — see Section 6.)
+
+========================================================
+SECTION 3 — STUDENT SURFACE (the hub)
+========================================================
+3.1  URL /class/<slug>, reached by scanning the permanent QR.
+3.2  Layout: class name; THIS WEEK as up to three large buttons
+     (Naloga 1/2/3 or teacher labels); below, collapsed,
+     "Prejšnji tedni" listing the previous 2–3 weeks, each
+     expandable to its three tasks. Nothing else. Weeks older
+     than the window fall off (absent-student catch-up window,
+     Christian's ruling: shallow archive, weekly refresh).
+3.3  Task 1 default: Dež corridor mode — assignment title, word
+     count, Igraj; level locked; Spomin and assignment-scoped
+     Slovarček one tap away; "Prosta igra" link to the full
+     game, present but visually secondary (corridor, not cage).
+3.4  Task 2/3: arbitrary URLs (Superintelligence lesson pages,
+     PDFs, videos, forms). The hub is a launcher, not a host.
+3.5  No student login in Phase A. Nothing is recorded about
+     hub visits.
+
+========================================================
+SECTION 4 — TEACHER SURFACE (the dashboard)
+========================================================
+4.1  One screen per class. Two modes:
+     PROGRAMME (default): choose programme, set start date,
+     print QR. Controls: Pause/Resume (holidays, repeat weeks),
+     Skip week, Swap this week's game for a custom set (one-off
+     override without leaving the programme).
+     MANUAL: three task slots (label + URL) edited weekly; a
+     built-in "Ustvari igro" button opens the Dež picker
+     (existing ≤20 picker + level + title) and writes the
+     resulting URL into a slot.
+4.2  QR: generated client-side, displayed for print/projection.
+     Encodes only /class/<slug>. Reprint never needed.
+4.3  Weekly advance: automatic each Monday (server clock) when
+     in programme mode and not paused. No emails, no reminders,
+     no notifications of any kind.
+
+========================================================
+SECTION 5 — PROGRAMME CONTENT PIPELINE
+========================================================
+5.1  Programmes are data, produced by the existing batch
+     pipeline: the curriculum's vocabulary order, filtered to
+     icon-ledger imageable nouns/verbs, chunked into ≤20-word
+     weeks, level assigned per week (1→2→3 progression across
+     the programme so the dual drill arrives when the class is
+     ready).
+5.2  Every icon batch (B1 Mesto, ...) extends both the game and
+     the programme library. One pipeline, three products:
+     course, game, classroom sequence.
+5.3  Programme definitions live in versioned data files in the
+     repo, QA-gated by verify.js extensions: every programme
+     week ≤20 words, all keys exist in POOL, levels valid,
+     week count matches declared length.
+5.4  Launch library: two programmes suffice — "Začetni
+     besednjak 1" (12 weeks, Level 1→2) and "Začetni besednjak
+     2" (12 weeks, Level 2→3). Both derivable from existing
+     77 words + batches B1–B3.
+
+========================================================
+SECTION 6 — PHASE B: SCORES (build only after A is stable)
+========================================================
+6.1  First scan per device: student taps their name from the
+     class list (teacher enters first names once) or adds it
+     (teacher approves). Device remembers. No passwords, no
+     emails, no birthdates — first names only, data-minimal,
+     minor-safe.
+6.2  Runs in corridor mode post: score, words mastered (3-runs
+     rule scoped to the assignment), the run's word-set hash
+     (so scores are comparable within the week's set).
+6.3  Teacher class page adds: weekly leaderboard (best 3 runs
+     count, per daily-rain precedent), and the MASTERY GRID —
+     which words the class collectively kept missing. The grid
+     is the lesson-prep payoff ("half of you missed ključ").
+6.4  Students see the leaderboard first-names-only inside the
+     class; nothing is ever public. Weekly reset (every Monday
+     a fresh race).
+6.5  Bridge until B ships: the trust model — corridor game-over
+     screen shows weekly best + words mastered, styled to be
+     read across a desk.
+
+========================================================
+SECTION 7 — ARCHITECTURE NOTES (for guardian review)
+========================================================
+7.1  Proposed: hub + dashboard + (later) score routes as a
+     bounded module in the Superintelligence Next.js app;
+     Prisma schema extension for Section 2 entities; game
+     itself stays the static dez-prototype repo (corridor mode
+     reads URL params; no game-code dependency on the backend).
+7.2  Teacher auth: reuse Superintelligence accounts (O1).
+7.3  Class slugs: cryptographically random, unguessable;
+     possession of the QR is the access model. Rate-limit slug
+     lookups.
+7.4  The guardian rules on: module boundaries, schema fit,
+     route placement, no entanglement with course engine /
+     message engine / Stripe.
+
+========================================================
+SECTION 8 — OPEN QUESTIONS FOR CHRISTIAN
+========================================================
+O1  Teacher auth = Superintelligence accounts? (Recommended.)
+O2  History window: 2 or 3 previous weeks on the hub?
+O3  Auto-advance day/time: Monday 06:00 local? And should a
+    paused week still show (frozen) or show a "počitnice"
+    message?
+O4  Programme naming and launch pair (5.4) — approve or rename.
+O5  Phase B trigger: build after first real class uses Phase A
+    for N weeks? Christian to set N.
+O6  Institutional sales question, pre-answered by P4: if a
+    school requests teacher analytics, the answer is no.
+    Confirm P4 as permanent.
+
+========================================================
+SECTION 9 — TRACK SPLIT & CHILDREN'S PRODUCT (Christian's ruling)
+========================================================
+9.1  TWO TRACKS, SPLIT BY RULING:
+     TRACK 1 (primary, active): Slovene for ADULTS. This entire
+     spec (Sections 1–8) applies to Track 1. Slovene as a second
+     language is overwhelmingly an adult market; programmes,
+     hub, dashboard and Phase B are built for adult classes.
+     TRACK 2 (future, separate product): CHILDREN learning
+     ENGLISH (or other major languages). Not a variant of the
+     Slovene app — its own product with its own name (the word
+     "Dež" carries no meaning for the target children), own
+     branding, and the design assumptions in 9.3.
+9.2  WHY THE SPLIT IS CHEAP: language lives entirely in the
+     data file. Icons are language-neutral (style-guide rule:
+     no text in assets). Track 2 = same engine + same icon
+     ledger + a new data file (English words, glosses in the
+     learners' L1) + reskin. One pipeline, both tracks.
+9.3  TRACK 2 DEFINING CONSTRAINT — NO STUDENT PHONES.
+     Teachers of children will not promote phone use; many
+     schools prohibit it; parents resist screen homework. The
+     children's product is therefore NOT "the app for kids"
+     but engine + ledger expressed through:
+     a) PROJECTED WHOLE-CLASS MODE: game on the teacher's
+        device via projector/whiteboard; the class plays
+        collectively (call the word, teacher taps). Larger
+        tiles, slower base speed; one device, the teacher's.
+     b) PRINT PIPELINE: the SVG assets are print-grade vectors.
+        Weekly word sets generate PRINTABLE materials from the
+        same ledger — Spomin card decks, picture-word sheets,
+        sticker sheets. Screenless homework and classroom
+        games; a product teachers would genuinely pay for.
+     c) FAMILY-DEVICE HOME PLAY: QR in the homework book opens
+        the corridor on a PARENT'S device — parent-mediated
+        play, the framing families accept.
+9.4  CHILD-SAFETY RULES (apply to Track 2, and to any Track 1
+     class that includes minors):
+     a) Data: teacher-managed name lists only — children never
+        type personal data; first names only; no child-facing
+        accounts ever. Documented as a GDPR-K/compliance
+        position, not just a preference.
+     b) Leaderboard: class-level setting, teacher chooses
+        RANKING (adult default) or CELEBRATION mode (top-3 +
+        "most words mastered" + "most improved"; no full
+        ranking, no visible bottom place).
+     c) Session nudge: mandatory in children's modes.
+     d) Content: per-programme word filtering — the ledger
+        gains an ageFlag; pivo/vino etc. excluded from
+        children's programmes by gate, not by memory.
+9.5  SEQUENCING: Track 2 begins only after Track 1 Phase A is
+     live with a real class (guard against product sprawl —
+     the count of simultaneously-shepherded products stays at
+     one until then). The print pipeline (9.3b) is the natural
+     first Track 2 artefact and can be prototyped cheaply from
+     existing assets whenever Christian wants a taste of it.
+
+END OF SPECIFICATION v1 (with §9 addendum)

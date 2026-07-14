@@ -1,0 +1,107 @@
+DEŽ ("RAIN") — VOCABULARY GAME SPECIFICATION v3
+Handoff package for Cowork / Claude Code
+Status: v3 — supersedes dez-game-spec-v2.txt
+Convention: British English throughout
+Platform: mobile, portrait, single-thumb play
+Reference build: dez-prototype-v11.html (77 words, all rulings live)
+
+========================================================
+CHANGES FROM v2 (Christian's rulings, sessions to date)
+========================================================
+C6  ARCADE-FIRST. Mandatory pre-run study cards REMOVED. Igraj →
+    setup → rain, instantly. The drip/study mode from v2 §2 is
+    SHELVED (code retained dormant) as a possible optional
+    "Nauči se" mode later. Slovarček repositioned as an open,
+    browsable dictionary — an invitation, never a gate. The v2
+    seen-pool rule is superseded by the RUN-POOL rule (C10).
+C7  SPOMIN ADDED. Pairs game (icon ↔ Slovene word, never
+    English), 4x4 grid, 8 pairs drawn from the active set, move
+    counter, mismatch flip-back. Calm counterpart to the arcade;
+    matches feed the shared mastery record.
+C8  TOPICS & LEVELS. Setup screen before each run:
+    - Tema: Vse | Hrana | Živali | Promet | Dom | Telo |
+      Oblačila | Narava | Glagoli | Izberi sam (custom)
+    - Stopnja: 1 počasi (slower, 3 buttons, no dual) /
+      2 hitro (faster, 4 buttons, word-class distractors) /
+      3 dvojina (adds the number drill)
+    First-time default = ONE starter topic (Hrana), never Vse.
+C9  CUSTOM SETS & SHARE CODES. "Izberi sam" grid of all words
+    as toggles. Selection encodes to a share code (base64 key
+    list); paste + Naloži imports it. Teacher → students with no
+    accounts or backend. Production version should replace
+    base64 with a short server-side code when accounts arrive.
+C10 LIMITS FRAMEWORK (this session's central ruling):
+    L1 RUN POOL CAP: each run samples at most 12 (Level 1) /
+       16 (Level 2) / 20 (Level 3) DISTINCT words from the
+       active set, least-mastered biased, resampled each run.
+       Run length remains endless (3 lives); the cap bounds
+       cognitive load, not time. Distractors draw from the run
+       pool only, so even wrong options recur and consolidate.
+    L2 CUSTOM SET SIZE: minimum 8 (Začni disabled below),
+       HARD MAXIMUM 20. At 20, further taps are ignored until
+       the user deselects a chosen word (toggle-to-swap). Share
+       codes therefore carry ≤20 words: one code = one run pool.
+    L3 PLURALITY DENSITY: number-drill drops at most 1 in 4,
+       never consecutive.
+    L4 ON-SCREEN MAXIMUM: 2 falling icons at once, ever.
+       Toolbar ≤4 buttons.
+    L5 SESSION NUDGE: soft message after 5 runs in a session
+       ("besede rade tudi počivajo"). No hard caps. Daily-rain
+       leaderboard (when built): first 3 attempts count.
+    L6 NO SAME WORD twice in a row from the spawner.
+    UNLIMITED BY DESIGN: Slovarček browsing, Spomin plays,
+    total vocabulary growth.
+C11 VOCABULARY AT 77 across 8 topics (see icon review sheet
+    v4). kolesariti (to cycle) replaces jahati per delivery-
+    rider ruling; native review to confirm kolesariti as
+    first-taught form vs voziti se s kolesom.
+C12 CONTRAST RULE (now in style guide): dark navy (#2c3350
+    family) permitted only as facial/detail marks on light
+    fills; never as structural outline against the sky.
+    Contrast pass applied to 11 icons in v10.
+
+========================================================
+CARRIED FORWARD UNCHANGED (v1/v2 rulings still in force)
+========================================================
+- Core loop: falling icons, bottom toolbar, tap-match, burst,
+  learning flash on miss (~1.3 s), 3 lives, ramping speed,
+  combo x5 cap, golden 5x, toolbar reshuffle, direction-flip
+  mode. Nothing purchasable, ever.
+- Plurality composition in code (1/2/3 copies of one asset);
+  same-word number-form toolbar; countable gate; mass nouns,
+  pluralia tantum (vrata, hlače, čevlji) and luč excluded
+  pending rulings.
+- All dual/plural morphology UNVERIFIED until native review.
+- Icons: 100% in-house SVG, no external licences (C3).
+- Mastery: correct in 3 separate runs = sticker/star.
+- British English; icon ledger discipline; QA gates Q1–Q4
+  re-anchored to the run pool.
+
+========================================================
+NEXT STRUCTURAL STEPS (agreed sequence)
+========================================================
+1. Icon style guide (separate pipeline document, this package).
+2. Data-file split: vocabulary/icons/forms out of game code
+   into dez-data.js (Claude Code brief, this package). Repo
+   becomes canonical; batches land as data drops.
+3. Batch pipeline B1+ (~25–35 words/session, themed, each with
+   regenerated review sheet, target ~350 words): Mesto → Sadje
+   & zelenjava → Kuhinja → Vreme → Družina → Šport → Barve
+   (word-class ruling needed) → Glagoli II → Poklici →
+   expansions.
+4. Native review batching for accumulating number forms and
+   flagged pairings.
+
+========================================================
+OPEN QUESTIONS
+========================================================
+O1 Endless-mode default confirmed; fixed-20-drop "challenge"
+   variant worth adding later?
+O2 Barve batch introduces adjectives — new word class needs a
+   design ruling (agreement is gendered).
+O3 Audio (native pronunciation on burst/study): still deferred.
+O4 Account system + server share codes: when?
+
+========================================================
+END OF SPECIFICATION v3
+========================================================
