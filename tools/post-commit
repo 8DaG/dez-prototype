@@ -1,4 +1,8 @@
 #!/bin/sh
 # One-way mirror to OneDrive after every commit. .git excluded: OneDrive sync corrupts git internals.
-robocopy "C:/Dev/superintelligence/games/dez" "C:/Users/Christian/OneDrive/Backups/dez" /MIR /XD .git node_modules /NFL /NDL /NJH /NJS >NUL 2>&1
+# NOTE: double-leading-slash on robocopy switches (//MIR etc.) is required — this hook runs
+# under Git for Windows' MSYS sh, which mangles a single leading "/switch" into a fake path
+# when calling a native exe. Redirect to /dev/null, not NUL (NUL is a cmd.exe-ism; under sh
+# it creates a literal file called NUL instead of discarding output).
+robocopy "C:/Dev/superintelligence/games/dez" "C:/Users/Christian/OneDrive/Backups/dez" //MIR //XD .git node_modules //NFL //NDL //NJH //NJS >/dev/null 2>&1
 exit 0
