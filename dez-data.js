@@ -90,7 +90,55 @@ window.DEZ_DATA = (function(){
     spati: `<svg ${S} class="anim-sleep"><rect x="8" y="38" width="48" height="12" rx="5" fill="#7c6ff0"/><rect x="8" y="46" width="48" height="6" rx="3" fill="#5b4fd4"/><circle cx="20" cy="34" r="7" fill="#f2c9a0"/><rect x="24" y="32" width="26" height="8" rx="4" fill="#a8b8ea"/><rect x="10" y="28" width="12" height="7" rx="3.5" fill="#fff"/><text x="36" y="22" font-size="11" font-weight="bold" fill="#cfd9ff" class="zz1">z</text><text x="42" y="16" font-size="9" font-weight="bold" fill="#cfd9ff" class="zz2">z</text><text x="47" y="11" font-size="7" font-weight="bold" fill="#cfd9ff" class="zz3">z</text></svg>`,
     teci: `<svg ${S} class="anim-run"><g class="body"><circle cx="34" cy="14" r="6" fill="#f2c9a0"/><path d="M32 20 L30 38" stroke="#4a90d9" stroke-width="7" stroke-linecap="round"/><path class="arm1" d="M32 25 L44 20" stroke="#f2c9a0" stroke-width="5" stroke-linecap="round"/><path d="M32 25 L21 30" stroke="#f2c9a0" stroke-width="5" stroke-linecap="round"/></g><path class="leg1" d="M31 38 L42 52" stroke="#7fb2f0" stroke-width="6" stroke-linecap="round"/><path class="leg2" d="M31 38 L22 52" stroke="#7fb2f0" stroke-width="6" stroke-linecap="round"/><path d="M8 50 h8 M6 44 h7 M10 56 h7" stroke="#9fb0d8" stroke-width="2.5" stroke-linecap="round" opacity=".7"/></svg>`,
     jesti: `<svg ${S} class="anim-eat"><circle cx="24" cy="26" r="9" fill="#f2c9a0"/><path d="M20 27 a5 5 0 0 0 8 0" stroke="#8a4a2a" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="21" cy="23" r="1.6" fill="#333"/><circle cx="27" cy="23" r="1.6" fill="#333"/><g class="fork"><path d="M40 34 L48 22" stroke="#8f9bb8" stroke-width="3" stroke-linecap="round"/><path d="M46 24 l-2 -4 m4 6 l-1 -5 m3 7 l0 -5" stroke="#8f9bb8" stroke-width="2" stroke-linecap="round"/><circle cx="39" cy="35" r="4" fill="#ef5f68"/></g><ellipse cx="34" cy="50" rx="18" ry="5" fill="#fff" opacity=".85"/><ellipse cx="34" cy="48" rx="18" ry="5" fill="#e8ecf8"/></svg>`,
-    piti: `<svg ${S} class="anim-drink"><circle cx="26" cy="24" r="9" fill="#f2c9a0"/><circle cx="23" cy="21" r="1.6" fill="#333"/><circle cx="29" cy="21" r="1.6" fill="#333"/><ellipse cx="26" cy="28" rx="2.4" ry="1.8" fill="#8a4a2a"/><g class="cuparm"><path d="M36 42 h10 l-2 -14 h-6 z" fill="#6fc3f7" stroke="#3f97d6" stroke-width="2"/><path d="M43 28 L46 16" stroke="#e88" stroke-width="2.5" stroke-linecap="round"/></g><path d="M20 34 L36 40" stroke="#f2c9a0" stroke-width="5" stroke-linecap="round"/></svg>`
+    piti: `<svg ${S} class="anim-drink"><circle cx="26" cy="24" r="9" fill="#f2c9a0"/><circle cx="23" cy="21" r="1.6" fill="#333"/><circle cx="29" cy="21" r="1.6" fill="#333"/><ellipse cx="26" cy="28" rx="2.4" ry="1.8" fill="#8a4a2a"/><g class="cuparm"><path d="M36 42 h10 l-2 -14 h-6 z" fill="#6fc3f7" stroke="#3f97d6" stroke-width="2"/><path d="M43 28 L46 16" stroke="#e88" stroke-width="2.5" stroke-linecap="round"/></g><path d="M20 34 L36 40" stroke="#f2c9a0" stroke-width="5" stroke-linecap="round"/></svg>`,
+    // --- v8 batch: hrana ---
+    pomaranca: `<svg ${S}><circle cx="32" cy="36" r="20" fill="#f5a623" stroke="#d1841a" stroke-width="2.5"/><path d="M32 16 q-3 -6 4 -8" stroke="#3d8a48" stroke-width="3" stroke-linecap="round" fill="none"/><ellipse cx="38" cy="10" rx="5" ry="3" fill="#5fb56a" stroke="#3d8a48" stroke-width="1.6" transform="rotate(30 38 10)"/></svg>`,
+    hruska: `<svg ${S}><path d="M32 14 c6 4 10 12 10 20 a10 12 0 0 1 -20 0 c0 -8 4 -16 10 -20 z" fill="#d9e05e" stroke="#a8b03a" stroke-width="2.5"/><path d="M32 14 v-6" stroke="#8a5a34" stroke-width="3" stroke-linecap="round"/><path d="M34 10 q4 -3 2 -7" stroke="#3d8a48" stroke-width="2" stroke-linecap="round" fill="none"/></svg>`,
+    oreh: `<svg ${S}><circle cx="32" cy="34" r="18" fill="#b57e3c" stroke="#8a5a34" stroke-width="2.5"/><path d="M32 16 v36 M20 22 q6 6 0 12 q6 6 0 12 M44 22 q-6 6 0 12 q-6 6 0 12" stroke="#8a5a34" stroke-width="2" fill="none"/></svg>`,
+    sok: `<svg ${S}><path d="M20 18 h24 l-3 34 a3 3 0 0 1 -3 3 h-12 a3 3 0 0 1 -3 -3 z" fill="#f5a623" stroke="#e0a92f" stroke-width="2.5"/><path d="M20 18 h24" stroke="#e0a92f" stroke-width="2.5"/><path d="M40 14 l-4 8" stroke="#3f97d6" stroke-width="3" stroke-linecap="round"/></svg>`,
+    // --- v8 batch: zivali ---
+    lisica: `<svg ${S}><path d="M16 18 l-6 -12 12 6 z" fill="#e8823a"/><path d="M48 18 l6 -12 -12 6 z" fill="#e8823a"/><circle cx="32" cy="34" r="17" fill="#e8823a" stroke="#c96a25" stroke-width="2.5"/><path d="M20 38 a10 8 0 0 0 12 8 a12 8 0 0 0 12 -8" fill="#fff" opacity=".85"/><circle cx="25" cy="30" r="2.2" fill="#2c1c0e"/><circle cx="39" cy="30" r="2.2" fill="#2c1c0e"/><path d="M32 34 l-2 4 h4 z" fill="#2c1c0e"/></svg>`,
+    volk: `<svg ${S}><path d="M14 20 l-4 -12 10 8 z" fill="#7c8494"/><path d="M50 20 l4 -12 -10 8 z" fill="#7c8494"/><circle cx="32" cy="34" r="18" fill="#8f9bb8" stroke="#6b7694" stroke-width="2.5"/><ellipse cx="32" cy="42" rx="9" ry="7" fill="#e8eefb"/><circle cx="25" cy="29" r="2.4" fill="#f5a623"/><circle cx="39" cy="29" r="2.4" fill="#f5a623"/><path d="M32 41 v3 m0 0 q-3 3 -5 1 m5 -1 q3 3 5 1" stroke="#3a2a1a" stroke-width="2" stroke-linecap="round"/></svg>`,
+    kaca: `<svg ${S}><path d="M10 46 q6 -20 22 -14 q16 6 4 -12" stroke="#5fb56a" stroke-width="8" fill="none" stroke-linecap="round"/><circle cx="38" cy="18" r="7" fill="#5fb56a" stroke="#3d8a48" stroke-width="2"/><circle cx="35" cy="16" r="1.6" fill="#2c3350"/><path d="M45 18 l6 -2 -6 5 z" fill="#e05c6b"/></svg>`,
+    slon: `<svg ${S}><ellipse cx="16" cy="30" rx="10" ry="13" fill="#aab6d4" stroke="#8f9bb8" stroke-width="2.5"/><ellipse cx="48" cy="30" rx="10" ry="13" fill="#aab6d4" stroke="#8f9bb8" stroke-width="2.5"/><ellipse cx="32" cy="32" rx="17" ry="15" fill="#c3cce4" stroke="#8f9bb8" stroke-width="2.5"/><path d="M28 40 q-2 12 2 16 q3 2 5 -1" stroke="#c3cce4" stroke-width="6" stroke-linecap="round" fill="none"/><circle cx="27" cy="28" r="1.8" fill="#2c3350"/><circle cx="37" cy="28" r="1.8" fill="#2c3350"/></svg>`,
+    // --- v8 batch: promet ---
+    helikopter: `<svg ${S}><ellipse cx="28" cy="36" rx="18" ry="10" fill="#e0766f" stroke="#b8524c" stroke-width="2.5"/><rect x="42" y="33" width="14" height="5" rx="2.5" fill="#e0766f" stroke="#b8524c" stroke-width="2"/><path d="M10 20 h44" stroke="#6b7694" stroke-width="3" stroke-linecap="round"/><rect x="26" y="16" width="4" height="6" fill="#6b7694"/><rect x="16" y="24" width="10" height="8" rx="2" fill="#cfe8ff"/><circle cx="14" cy="46" r="3" fill="#8f9bb8"/><circle cx="42" cy="46" r="3" fill="#8f9bb8"/></svg>`,
+    motor: `<svg ${S}><circle cx="16" cy="46" r="9" stroke="#e8eefb" stroke-width="3.5" fill="none"/><circle cx="48" cy="46" r="9" stroke="#e8eefb" stroke-width="3.5" fill="none"/><path d="M16 46 L26 30 h14 l8 16" stroke="#e05c6b" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="30" y="20" width="14" height="7" rx="2" fill="#2c3350"/><path d="M40 27 l8 -3" stroke="#2c3350" stroke-width="3" stroke-linecap="round"/></svg>`,
+    zicnica: `<svg ${S}><path d="M4 10 L60 40" stroke="#8f9bb8" stroke-width="2.5"/><rect x="24" y="30" width="20" height="16" rx="3" fill="#6fc3f7" stroke="#3f97d6" stroke-width="2.5"/><path d="M32 24 l2 6 h-4 z" fill="#8f9bb8"/><rect x="28" y="34" width="6" height="6" fill="#cfe8ff"/><rect x="36" y="34" width="6" height="6" fill="#cfe8ff"/></svg>`,
+    podmornica: `<svg ${S}><path d="M8 34 a24 10 0 0 1 48 0 a24 10 0 0 1 -48 0 z" fill="#ffcf5c" stroke="#e0a92f" stroke-width="2.5"/><rect x="28" y="18" width="8" height="10" rx="2" fill="#ffcf5c" stroke="#e0a92f" stroke-width="2"/><circle cx="34" cy="14" r="2" fill="#8f9bb8"/><circle cx="22" cy="34" r="3" fill="#6fc3f7" stroke="#3f97d6" stroke-width="1.6"/><path d="M8 34 h-6 M56 34 h6" stroke="#e0a92f" stroke-width="3" stroke-linecap="round"/></svg>`,
+    // --- v8 batch: dom ---
+    omara: `<svg ${S}><rect x="14" y="8" width="36" height="48" rx="3" fill="#b57e3c" stroke="#8a5a34" stroke-width="2.5"/><path d="M32 8 v48" stroke="#8a5a34" stroke-width="2.5"/><circle cx="27" cy="32" r="1.8" fill="#ffcf5c"/><circle cx="37" cy="32" r="1.8" fill="#ffcf5c"/></svg>`,
+    predal: `<svg ${S}><rect x="10" y="14" width="44" height="36" rx="3" fill="#d99a52" stroke="#8a5a34" stroke-width="2.5"/><rect x="14" y="18" width="36" height="12" rx="2" fill="#b57e3c" stroke="#8a5a34" stroke-width="1.6"/><rect x="14" y="34" width="36" height="12" rx="2" fill="#b57e3c" stroke="#8a5a34" stroke-width="1.6"/><rect x="27" y="22" width="10" height="3" rx="1.5" fill="#ffcf5c"/><rect x="27" y="38" width="10" height="3" rx="1.5" fill="#ffcf5c"/></svg>`,
+    preproga: `<svg ${S}><rect x="8" y="20" width="48" height="26" rx="3" fill="#e05c6b" stroke="#b53a49" stroke-width="2.5"/><rect x="14" y="26" width="36" height="14" rx="2" fill="#f0798a"/><path d="M20 26 v14 M32 26 v14 M44 26 v14" stroke="#b53a49" stroke-width="1.6"/><path d="M8 20 h48 M8 46 h48" stroke="#b53a49" stroke-width="2"/></svg>`,
+    ogledalo: `<svg ${S}><ellipse cx="32" cy="26" rx="16" ry="20" fill="#e8eefb" stroke="#8f9bb8" stroke-width="3"/><ellipse cx="32" cy="26" rx="11" ry="15" fill="#cfe8ff" opacity=".6"/><rect x="28" y="44" width="8" height="12" rx="2" fill="#b57e3c" stroke="#8a5a34" stroke-width="2"/><path d="M20 52 h24" stroke="#8a5a34" stroke-width="3" stroke-linecap="round"/></svg>`,
+    // --- v8 batch: telo ---
+    nos: `<svg ${S}><path d="M28 12 q-8 16 -8 26 a12 8 0 0 0 24 0 q0 -10 -8 -26 z" fill="#f2c9a0" stroke="#d9a878" stroke-width="2.5"/><circle cx="26" cy="38" r="2" fill="#c9986a"/><circle cx="38" cy="38" r="2" fill="#c9986a"/></svg>`,
+    zob: `<svg ${S}><path d="M20 14 a12 10 0 0 1 24 0 q2 14 -2 26 q-2 6 -6 6 q-4 0 -4 -10 q0 -6 -4 -6 t-4 6 q0 10 -4 10 q-4 0 -6 -6 q-4 -12 -2 -26 z" fill="#fff" stroke="#c9d4ee" stroke-width="2.5"/></svg>`,
+    uho: `<svg ${S}><path d="M28 12 q18 -2 20 18 q1 14 -10 20 q-8 4 -12 -4 q-3 -6 2 -10 q6 -4 4 -10 q-2 -8 -12 -6 q-6 1 -6 -4 q0 -4 14 -4 z" fill="#f2c9a0" stroke="#d9a878" stroke-width="2.5"/><path d="M30 30 q4 -4 8 0" stroke="#d9a878" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`,
+    prst: `<svg ${S}><rect x="26" y="10" width="12" height="38" rx="6" fill="#f2c9a0" stroke="#d9a878" stroke-width="2.5"/><ellipse cx="32" cy="48" rx="9" ry="6" fill="#f2c9a0" stroke="#d9a878" stroke-width="2.5"/><path d="M27 24 h10 M27 32 h10" stroke="#d9a878" stroke-width="1.6" opacity=".6"/></svg>`,
+    // --- v8 batch: oblacila ---
+    plasc: `<svg ${S}><path d="M22 10 h20 l12 10 -6 8 -6 -4 v32 h-20 V24 l-6 4 -6 -8 z" fill="#56679a" stroke="#3d4a75" stroke-width="2.5"/><path d="M32 12 v46" stroke="#3d4a75" stroke-width="2"/><circle cx="28" cy="30" r="1.6" fill="#ffcf5c"/><circle cx="28" cy="38" r="1.6" fill="#ffcf5c"/><circle cx="28" cy="46" r="1.6" fill="#ffcf5c"/></svg>`,
+    pulover: `<svg ${S}><path d="M22 12 h20 l10 8 -5 8 -5 -3 v29 h-20 V25 l-5 3 -5 -8 z" fill="#e0766f" stroke="#b8524c" stroke-width="2.5"/><path d="M12 20 h40 M12 28 h40" stroke="#f5c8c4" stroke-width="3"/><path d="M27 12 q5 6 10 0" stroke="#b8524c" stroke-width="2.5" fill="none"/></svg>`,
+    rokavica: `<svg ${S}><path d="M24 56 v-20 q0 -4 -4 -4 t-4 4 v10 q-8 -2 -8 -10 v-8 q0 -3 3 -3 t3 3 v6 q0 -10 4 -10 t4 4 v-14 q0 -3 3 -3 t3 3 v14 q0 -3 3 -3 t3 3 v14 q0 -3 3 -3 t3 3 v14 q0 8 -6 12 z" fill="#4a90d9" stroke="#2f6cab" stroke-width="2.5" stroke-linejoin="round"/></svg>`,
+    nogavica: `<svg ${S}><path d="M24 8 h16 v24 l14 10 q4 3 2 8 t-8 4 h-14 q-6 0 -10 -6 l-4 -8 v-32 z" fill="#7ce8a9" stroke="#4bb87a" stroke-width="2.5"/><path d="M24 18 h16" stroke="#4bb87a" stroke-width="2.5"/></svg>`,
+    // --- v8 batch: narava ---
+    zvezda: `<svg ${S}><path d="M32 8 l6 16 17 1 -13 11 5 16 -15 -9 -15 9 5 -16 -13 -11 17 -1 z" fill="#ffcf5c" stroke="#e0a92f" stroke-width="2.5" stroke-linejoin="round"/></svg>`,
+    reka: `<svg ${S}><path d="M8 14 q10 8 4 16 t2 16 t8 16" stroke="#3f97d6" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M18 14 q10 8 4 16 t2 16 t8 16" stroke="#6fc3f7" stroke-width="4" fill="none" stroke-linecap="round" opacity=".7"/></svg>`,
+    kamen: `<svg ${S}><path d="M12 40 a16 12 10 1 1 32 -4 a14 10 -10 1 1 -32 4 z" fill="#8f9bb8" stroke="#6b7694" stroke-width="2.5"/><path d="M22 30 q4 -2 6 2 M32 34 q4 -3 6 1" stroke="#6b7694" stroke-width="1.6" fill="none" opacity=".6"/></svg>`,
+    gozd: `<svg ${S}><circle cx="16" cy="26" r="10" fill="#5fb56a" stroke="#3d8a48" stroke-width="2.5"/><path d="M16 34 v14" stroke="#8a5a34" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="18" r="13" fill="#4bb87a" stroke="#3d8a48" stroke-width="2.5"/><path d="M32 28 v20" stroke="#8a5a34" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="26" r="10" fill="#5fb56a" stroke="#3d8a48" stroke-width="2.5"/><path d="M48 34 v14" stroke="#8a5a34" stroke-width="3" stroke-linecap="round"/></svg>`,
+    // --- v8 batch: glagoli (animated) ---
+    igrati: `<svg ${S} class="anim-play"><circle cx="24" cy="14" r="7" fill="#f2c9a0"/><path d="M24 21 v18" stroke="#e0766f" stroke-width="6" stroke-linecap="round"/><path class="arm1" d="M24 26 L36 20" stroke="#f2c9a0" stroke-width="4.5" stroke-linecap="round"/><path class="arm2" d="M24 26 L14 30" stroke="#f2c9a0" stroke-width="4.5" stroke-linecap="round"/><path d="M24 39 L18 52" stroke="#4a90d9" stroke-width="5.5" stroke-linecap="round"/><path d="M24 39 L30 52" stroke="#4a90d9" stroke-width="5.5" stroke-linecap="round"/><circle class="ball" cx="46" cy="42" r="8" fill="#ffcf5c" stroke="#e0a92f" stroke-width="2.5"/></svg>`,
+    delati: `<svg ${S} class="anim-work"><rect x="8" y="42" width="48" height="6" rx="2" fill="#b57e3c" stroke="#8a5a34" stroke-width="2"/><circle cx="26" cy="14" r="7" fill="#f2c9a0"/><path d="M26 21 v18" stroke="#7c6ff0" stroke-width="6" stroke-linecap="round"/><path class="arm1" d="M26 26 L18 36" stroke="#f2c9a0" stroke-width="4.5" stroke-linecap="round"/><g class="hammer"><path d="M38 30 L48 16" stroke="#8a5a34" stroke-width="4" stroke-linecap="round"/><rect x="44" y="10" width="12" height="8" rx="2" fill="#8f9bb8" stroke="#6b7694" stroke-width="2"/></g></svg>`,
+    peti: `<svg ${S} class="anim-sing"><circle cx="28" cy="30" r="14" fill="#f2c9a0" stroke="#d9a878" stroke-width="2.5"/><circle cx="24" cy="26" r="1.8" fill="#333"/><circle cx="33" cy="26" r="1.8" fill="#333"/><ellipse cx="28" cy="36" rx="4" ry="5" fill="#8a4a2a"/><g class="notes"><path d="M44 16 v14 a4 4 0 1 1 -2 -3.4 V16 z" fill="#e05c6b"/><path d="M52 10 v10 a3 3 0 1 1 -1.6 -2.6 V10 z" fill="#e05c6b"/></g></svg>`,
+    // --- v9 batch: work verbs (animated) ---
+    nositi: `<svg ${S} class="anim-carry"><circle cx="24" cy="14" r="7" fill="#f2c9a0"/><path d="M24 21 v14" stroke="#4a90d9" stroke-width="6" stroke-linecap="round"/><path class="arm1" d="M24 26 L36 34" stroke="#f2c9a0" stroke-width="4.5" stroke-linecap="round"/><path class="arm2" d="M24 26 L14 34" stroke="#f2c9a0" stroke-width="4.5" stroke-linecap="round"/><path d="M24 35 L18 52" stroke="#2c3350" stroke-width="5.5" stroke-linecap="round"/><path d="M24 35 L30 52" stroke="#2c3350" stroke-width="5.5" stroke-linecap="round"/><rect class="box" x="32" y="30" width="18" height="16" rx="2" fill="#d99a52" stroke="#8a5a34" stroke-width="2.5"/><path d="M32 38 h18" stroke="#8a5a34" stroke-width="1.6"/></svg>`,
+    dvigniti: `<svg ${S} class="anim-lift"><circle cx="32" cy="20" r="7" fill="#f2c9a0"/><path d="M32 27 v16" stroke="#e0766f" stroke-width="6" stroke-linecap="round"/><path class="arm1" d="M32 30 L20 16" stroke="#f2c9a0" stroke-width="4.5" stroke-linecap="round"/><path class="arm2" d="M32 30 L44 16" stroke="#f2c9a0" stroke-width="4.5" stroke-linecap="round"/><rect class="weight" x="14" y="6" width="36" height="8" rx="2" fill="#8f9bb8" stroke="#6b7694" stroke-width="2"/><circle cx="18" cy="10" r="6" fill="#6b7694"/><circle cx="46" cy="10" r="6" fill="#6b7694"/><path d="M32 43 L26 56" stroke="#2c3350" stroke-width="5.5" stroke-linecap="round"/><path d="M32 43 L38 56" stroke="#2c3350" stroke-width="5.5" stroke-linecap="round"/></svg>`,
+    nakladati: `<svg ${S} class="anim-load"><rect x="6" y="40" width="20" height="14" rx="2" fill="#b57e3c" stroke="#8a5a34" stroke-width="2"/><rect x="8" y="26" width="16" height="12" rx="2" fill="#d99a52" stroke="#8a5a34" stroke-width="2"/><circle cx="42" cy="16" r="7" fill="#f2c9a0"/><path d="M42 23 v12" stroke="#7c6ff0" stroke-width="6" stroke-linecap="round"/><path class="arm1" d="M42 26 L32 20" stroke="#f2c9a0" stroke-width="4.5" stroke-linecap="round"/><rect class="box" x="30" y="10" width="16" height="12" rx="2" fill="#d99a52" stroke="#8a5a34" stroke-width="2"/><path d="M42 35 L36 52" stroke="#2c3350" stroke-width="5.5" stroke-linecap="round"/><path d="M42 35 L48 52" stroke="#2c3350" stroke-width="5.5" stroke-linecap="round"/></svg>`,
+    kopati: `<svg ${S} class="anim-dig"><circle cx="26" cy="14" r="7" fill="#f2c9a0"/><path d="M26 21 v18" stroke="#e0766f" stroke-width="6" stroke-linecap="round"/><path class="arm1" d="M26 26 L40 40" stroke="#f2c9a0" stroke-width="4.5" stroke-linecap="round"/><path d="M26 39 L20 54" stroke="#2c3350" stroke-width="5.5" stroke-linecap="round"/><path d="M26 39 L32 54" stroke="#2c3350" stroke-width="5.5" stroke-linecap="round"/><g class="shovel"><path d="M40 40 L52 52" stroke="#8a5a34" stroke-width="4" stroke-linecap="round"/><path d="M48 48 l8 10 -12 2 z" fill="#8f9bb8" stroke="#6b7694" stroke-width="2"/></g><path d="M8 56 h48" stroke="#8a5a34" stroke-width="3" stroke-linecap="round" opacity=".5"/></svg>`,
+    zagati: `<svg ${S} class="anim-saw"><rect x="8" y="42" width="48" height="6" rx="2" fill="#b57e3c" stroke="#8a5a34" stroke-width="2"/><circle cx="24" cy="14" r="7" fill="#f2c9a0"/><path d="M24 21 v18" stroke="#7c6ff0" stroke-width="6" stroke-linecap="round"/><path class="arm1" d="M24 26 L42 34" stroke="#f2c9a0" stroke-width="4.5" stroke-linecap="round"/><path d="M24 39 L18 54" stroke="#2c3350" stroke-width="5.5" stroke-linecap="round"/><path d="M24 39 L30 54" stroke="#2c3350" stroke-width="5.5" stroke-linecap="round"/><g class="saw"><path d="M36 30 L54 38" stroke="#8f9bb8" stroke-width="4" stroke-linecap="round"/><path d="M38 32 l3 3 m3 1 l3 3 m3 1 l3 3" stroke="#6b7694" stroke-width="1.6" stroke-linecap="round"/></g></svg>`,
+    vrtati: `<svg ${S} class="anim-drill"><rect x="44" y="6" width="8" height="50" rx="2" fill="#e8eefb" opacity=".3"/><circle cx="24" cy="20" r="7" fill="#f2c9a0"/><path d="M24 27 v16" stroke="#4a90d9" stroke-width="6" stroke-linecap="round"/><path class="arm1" d="M24 32 L40 30" stroke="#f2c9a0" stroke-width="4.5" stroke-linecap="round"/><path d="M24 43 L18 56" stroke="#2c3350" stroke-width="5.5" stroke-linecap="round"/><path d="M24 43 L30 56" stroke="#2c3350" stroke-width="5.5" stroke-linecap="round"/><g class="drill"><rect x="38" y="24" width="14" height="10" rx="2" fill="#e05c6b" stroke="#b53a49" stroke-width="2"/><path d="M52 29 h6" stroke="#6b7694" stroke-width="3" stroke-linecap="round"/></g></svg>`,
+    zabijati: `<svg ${S} class="anim-hammer"><circle cx="26" cy="14" r="7" fill="#f2c9a0"/><path d="M26 21 v18" stroke="#5fb56a" stroke-width="6" stroke-linecap="round"/><path class="arm1" d="M26 26 L40 16" stroke="#f2c9a0" stroke-width="4.5" stroke-linecap="round"/><path d="M26 39 L20 54" stroke="#2c3350" stroke-width="5.5" stroke-linecap="round"/><path d="M26 39 L32 54" stroke="#2c3350" stroke-width="5.5" stroke-linecap="round"/><g class="hammer"><path d="M40 16 L50 6" stroke="#8a5a34" stroke-width="4" stroke-linecap="round"/><rect x="46" y="0" width="12" height="8" rx="2" fill="#8f9bb8" stroke="#6b7694" stroke-width="2"/></g><path d="M20 56 h16" stroke="#8a5a34" stroke-width="3" stroke-linecap="round"/></svg>`,
+    dostaviti: `<svg ${S} class="anim-deliver"><rect x="6" y="30" width="20" height="16" rx="2" fill="#7c6ff0" stroke="#5b4fd4" stroke-width="2.5"/><rect x="8" y="34" width="8" height="6" fill="#cfe8ff"/><circle cx="12" cy="48" r="3" fill="#8f9bb8"/><circle cx="22" cy="48" r="3" fill="#8f9bb8"/><circle cx="44" cy="18" r="7" fill="#f2c9a0"/><path d="M44 25 v14" stroke="#e0766f" stroke-width="6" stroke-linecap="round"/><path class="arm1" d="M44 28 L34 34" stroke="#f2c9a0" stroke-width="4.5" stroke-linecap="round"/><path class="arm2" d="M44 28 L54 34" stroke="#f2c9a0" stroke-width="4.5" stroke-linecap="round"/><rect class="box" x="34" y="30" width="14" height="12" rx="2" fill="#d99a52" stroke="#8a5a34" stroke-width="2"/><path d="M44 39 L38 54" stroke="#2c3350" stroke-width="5.5" stroke-linecap="round"/><path d="M44 39 L50 54" stroke="#2c3350" stroke-width="5.5" stroke-linecap="round"/></svg>`
   };
   
   // ---------- NUMBER FORMS (BEST-EFFORT — UNVERIFIED, pending native review) ----------
@@ -140,7 +188,38 @@ window.DEZ_DATA = (function(){
     roza:      {1:'ena roža',      2:'dve roži',      3:'tri rože'},
     gora:      {1:'ena gora',      2:'dve gori',      3:'tri gore'},
     oblak:     {1:'en oblak',      2:'dva oblaka',    3:'trije oblaki'},
-    skiro:     {1:'en skiro',      2:'dva skiroja',   3:'trije skiroji'}
+    skiro:     {1:'en skiro',      2:'dva skiroja',   3:'trije skiroji'},
+    // v8 batch — ALL UNVERIFIED pending native review
+    // ⚠ flagged = higher risk of error (irregular / infix declension), see review sheet.
+    pomaranca: {1:'ena pomaranča', 2:'dve pomaranči', 3:'tri pomaranče'},
+    hruska:    {1:'ena hruška',    2:'dve hruški',    3:'tri hruške'},
+    oreh:      {1:'en oreh',       2:'dva oreha',     3:'trije orehi'},
+    // sok — mass noun, deliberately excluded (like vino, pivo, caj)
+    lisica:    {1:'ena lisica',    2:'dve lisici',    3:'tri lisice'},
+    volk:      {1:'en volk',       2:'dva volkova',   3:'trije volkovi'}, // ⚠ infix
+    kaca:      {1:'ena kača',      2:'dve kači',      3:'tri kače'},
+    slon:      {1:'en slon',       2:'dva slona',     3:'trije sloni'},
+    helikopter:{1:'en helikopter', 2:'dva helikopterja', 3:'trije helikopterji'},
+    motor:     {1:'en motor',      2:'dva motorja',   3:'trije motorji'},
+    zicnica:   {1:'ena žičnica',   2:'dve žičnici',   3:'tri žičnice'},
+    podmornica:{1:'ena podmornica',2:'dve podmornici',3:'tri podmornice'},
+    omara:     {1:'ena omara',     2:'dve omari',     3:'tri omare'},
+    predal:    {1:'en predal',     2:'dva predala',   3:'trije predali'},
+    preproga:  {1:'ena preproga',  2:'dve preprogi',  3:'tri preproge'},
+    ogledalo:  {1:'eno ogledalo',  2:'dve ogledali',  3:'tri ogledala'},
+    nos:       {1:'en nos',        2:'dva nosova',    3:'trije nosovi'}, // ⚠ infix
+    zob:       {1:'en zob',        2:'dva zoba',      3:'trije zobje'},  // ⚠ irregular plural
+    uho:       {1:'eno uho',       2:'dve ušesi',     3:'tri ušesa'},    // ⚠ irregular n-stem (same pattern as oko)
+    prst:      {1:'en prst',       2:'dva prsta',     3:'trije prsti'},
+    plasc:     {1:'en plašč',      2:'dva plašča',    3:'trije plašči'},
+    pulover:   {1:'en pulover',    2:'dva puloverja', 3:'trije puloverji'},
+    rokavica:  {1:'ena rokavica',  2:'dve rokavici',  3:'tri rokavice'},
+    nogavica:  {1:'ena nogavica',  2:'dve nogavici',  3:'tri nogavice'},
+    zvezda:    {1:'ena zvezda',    2:'dve zvezdi',    3:'tri zvezde'},
+    reka:      {1:'ena reka',      2:'dve reki',      3:'tri reke'},
+    kamen:     {1:'en kamen',      2:'dva kamna',     3:'trije kamni'},
+    gozd:      {1:'en gozd',       2:'dva gozdova',   3:'trije gozdovi'} // ⚠ infix
+    // igrati, delati, peti — verbs, no number forms
     // Deliberately excluded: mass/uncountable (meso, juha, vino, pivo, caj,
     // sladoled, sneg, morje, sonce, luna); pluralia tantum & pair nouns
     // (vrata, hlace, cevlji — grammar differs, needs its own ruling);
@@ -237,7 +316,48 @@ window.DEZ_DATA = (function(){
     {key:'govoriti',  sl:'govoriti',   en:'to speak',  cls:'verb', topic:'glagoli'},
     {key:'kolesariti',sl:'kolesariti', en:'to cycle / ride a bike', cls:'verb', topic:'glagoli'},
     {key:'voziti',    sl:'voziti',     en:'to drive',  cls:'verb', topic:'glagoli'},
-    {key:'graditi',   sl:'graditi',    en:'to build',  cls:'verb', topic:'glagoli'}
+    {key:'graditi',   sl:'graditi',    en:'to build',  cls:'verb', topic:'glagoli'},
+    // --- expansion batch (v8) ---
+    {key:'pomaranca', sl:'pomaranča', en:'orange',    cls:'noun', topic:'hrana'},
+    {key:'hruska',    sl:'hruška',    en:'pear',      cls:'noun', topic:'hrana'},
+    {key:'oreh',      sl:'oreh',      en:'walnut',    cls:'noun', topic:'hrana'},
+    {key:'sok',       sl:'sok',       en:'juice',     cls:'noun', topic:'hrana'},
+    {key:'lisica',    sl:'lisica',    en:'fox',       cls:'noun', topic:'zivali'},
+    {key:'volk',      sl:'volk',      en:'wolf',      cls:'noun', topic:'zivali'},
+    {key:'kaca',      sl:'kača',      en:'snake',     cls:'noun', topic:'zivali'},
+    {key:'slon',      sl:'slon',      en:'elephant',  cls:'noun', topic:'zivali'},
+    {key:'helikopter',sl:'helikopter',en:'helicopter',cls:'noun', topic:'promet'},
+    {key:'motor',     sl:'motor',     en:'motorbike', cls:'noun', topic:'promet'},
+    {key:'zicnica',   sl:'žičnica',   en:'cable car', cls:'noun', topic:'promet'},
+    {key:'podmornica',sl:'podmornica',en:'submarine', cls:'noun', topic:'promet'},
+    {key:'omara',     sl:'omara',     en:'wardrobe',  cls:'noun', topic:'dom'},
+    {key:'predal',    sl:'predal',    en:'drawer',    cls:'noun', topic:'dom'},
+    {key:'preproga',  sl:'preproga',  en:'rug',       cls:'noun', topic:'dom'},
+    {key:'ogledalo',  sl:'ogledalo',  en:'mirror',    cls:'noun', topic:'dom'},
+    {key:'nos',       sl:'nos',       en:'nose',      cls:'noun', topic:'telo'},
+    {key:'zob',       sl:'zob',       en:'tooth',     cls:'noun', topic:'telo'},
+    {key:'uho',       sl:'uho',       en:'ear',       cls:'noun', topic:'telo'},
+    {key:'prst',      sl:'prst',      en:'finger',    cls:'noun', topic:'telo'},
+    {key:'plasc',     sl:'plašč',     en:'coat',      cls:'noun', topic:'oblacila'},
+    {key:'pulover',   sl:'pulover',   en:'sweater',   cls:'noun', topic:'oblacila'},
+    {key:'rokavica',  sl:'rokavica',  en:'glove',     cls:'noun', topic:'oblacila'},
+    {key:'nogavica',  sl:'nogavica',  en:'sock',      cls:'noun', topic:'oblacila'},
+    {key:'zvezda',    sl:'zvezda',    en:'star',      cls:'noun', topic:'narava'},
+    {key:'reka',      sl:'reka',      en:'river',     cls:'noun', topic:'narava'},
+    {key:'kamen',     sl:'kamen',     en:'stone',     cls:'noun', topic:'narava'},
+    {key:'gozd',      sl:'gozd',      en:'forest',    cls:'noun', topic:'narava'},
+    {key:'igrati',    sl:'igrati',    en:'to play',   cls:'verb', topic:'glagoli'},
+    {key:'delati',    sl:'delati',    en:'to work',   cls:'verb', topic:'glagoli'},
+    {key:'peti',      sl:'peti',      en:'to sing',   cls:'verb', topic:'glagoli'},
+    // --- expansion batch (v9): work verbs ---
+    {key:'nositi',      sl:'nositi',      en:'to carry',  cls:'verb', topic:'glagoli'},
+    {key:'dvigniti',    sl:'dvigniti',    en:'to lift',   cls:'verb', topic:'glagoli'},
+    {key:'nakladati',   sl:'nakladati',   en:'to load',   cls:'verb', topic:'glagoli'},
+    {key:'kopati',      sl:'kopati',      en:'to dig',    cls:'verb', topic:'glagoli'},
+    {key:'zagati',      sl:'žagati',      en:'to saw',    cls:'verb', topic:'glagoli'},
+    {key:'vrtati',      sl:'vrtati',      en:'to drill',  cls:'verb', topic:'glagoli'},
+    {key:'zabijati',    sl:'zabijati',    en:'to hammer / to nail', cls:'verb', topic:'glagoli'},
+    {key:'dostaviti',   sl:'dostaviti',   en:'to deliver',cls:'verb', topic:'glagoli'}
   ];
   return {S, ICONS, NUMBER_FORMS, TOPICS, POOL};
 })();
