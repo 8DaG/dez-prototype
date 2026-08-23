@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Dež — prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -653,7 +655,13 @@ function labelFor(f){
 function buildToolbarFor(f){
   // toolbar always reflects the LOWEST unresolved faller (the urgent one)
   const target = lowestFaller();
-  if(!target) return;
+  if(!target){ toolbarFor=null; return; }
+  // Rebuilding for a faller the toolbar already answers swapped the buttons out
+  // from under the player's finger — fresh distractors in fresh positions, and
+  // any tap landing mid-swap hit a detached node and did nothing. Only rebuild
+  // when the target genuinely changes.
+  if(target===toolbarFor && toolbar.childElementCount) return;
+  toolbarFor=target;
   toolbar.innerHTML='';
   let opts;
   if(target.plural){
@@ -1080,13 +1088,26 @@ document.getElementById('sp-close').addEventListener('click',()=>{spScreen.class
 // ---------- GAME FLOW ----------
 const RUN_POOL_CAP={1:12,2:16,3:20};
 let runPool=[];
+let toolbarFor=null; // which faller the current toolbar answers
 function sampleRunPool(){
   const src=activePool();
   const cap=RUN_POOL_CAP[settings.level]||20;
   if(src.length<=cap){runPool=[...src];return;}
   // least-mastered first, then shuffle within to vary runs
-  const sorted=[...src].sort((a,b)=>(progress.mastery[a.key]?.runsCorrect||0)-(progress.mastery[b.key]?.runsCorrect||0));
-  runPool=shuffle(sorted.slice(0,cap));
+  // Least-mastered biased, but genuinely resampled each run (SPEC C10 L1).
+  // A plain sort+slice was deterministic: on a fresh profile every word sits at
+  // zero and Array.sort is stable, so the same cap words came up on every run
+  // and the rest of the topic was unreachable (14 of 24 verbs, in practice).
+  // Now: random tiebreak among equal mastery, always keep the weakest few, then
+  // fill the remainder at random from a wider window.
+  const sorted=[...src]
+    .map(w=>({w,m:progress.mastery[w.key]?.runsCorrect||0,r:Math.random()}))
+    .sort((a,b)=>(a.m-b.m)||(a.r-b.r))
+    .map(o=>o.w);
+  const keep=Math.max(2,Math.round(cap*0.4));
+  const windowEnd=Math.min(src.length,Math.round(cap*2.5));
+  const filler=shuffle(sorted.slice(keep,windowEnd)).slice(0,cap-keep);
+  runPool=shuffle([...sorted.slice(0,keep),...filler]);
 }
 
 function startGame(){
